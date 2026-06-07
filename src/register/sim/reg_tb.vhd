@@ -151,7 +151,6 @@ begin
   -- Test Sequencer Process
   -- ================================================
   proc_test_sequencer : process
-    variable v_test_data : t_bus_data;
   begin
     test_runner_setup(runner, runner_cfg);
 
