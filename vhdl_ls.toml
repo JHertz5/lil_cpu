@@ -6,3 +6,7 @@ lil_cpu.files = [
   'src/**/hdl/*.vhd',
   'src/**/sim/*.vhd'
 ]
+vunit_lib.files = [
+  '.venv/lib/python3.10/site-packages/vunit/vhdl/*.vhd',
+  '.venv/lib/python3.10/site-packages/vunit/vhdl/**/*.vhd'
+]
