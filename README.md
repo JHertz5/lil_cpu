@@ -5,7 +5,7 @@ Yet another small VHDL CPU design. The goals of this project are to:
 - have a bit of fun.
 
 # Design
-The project was inspired by [Ben Eater's 8-bit computer](https://eater.net/8bit), which I built on breadboards many years ago. Ben's design is a variant of the ["Simple-As-Possible"](https://handwiki.org/wiki/Simple-As-Possible#cite_note-1) computer from the book Digital Computer Electronics by Albert Paul Malvino and Jerald A. Brown. I'll start off by building SAP-1.
+The project was inspired by [Ben Eater's 8-bit computer](https://eater.net/8bit), which I built on breadboards many years ago. Ben's design is a variant of the ["Simple-As-Possible"](https://en.wikipedia.org/wiki/Simple-As-Possible_computer) computer from the book Digital Computer Electronics by Albert Paul Malvino and Jerald A. Brown. I'll start off by building SAP-1.
 
 SAP-1's design is broken down into modules, as shown below:
 
@@ -33,5 +33,6 @@ For each module, I'd like to do the following tasks.
 [ ] Verification - A self-checking testbench to validate the operation of the module.
 
 # Stretch Goals
-- implement the [LC-3](https://en.wikipedia.org/wiki/Little_Computer_3) ISA.
-- implement a compiler from assembly to machine code.
+- Run the CPU on real hardware (maybe [FOMU](https://www.crowdsupply.com/sutajio-kosagi/fomu) or [iCEBreaker](https://1bitsquared.com/products/icebreaker).
+- Implement the [LC-3](https://en.wikipedia.org/wiki/Little_Computer_3) ISA.
+- Implement a compiler from assembly to machine code.
