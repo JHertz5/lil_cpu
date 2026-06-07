@@ -10,10 +10,9 @@ library vunit_lib;
   context vunit_lib.vunit_context;
 
 library lil_cpu;
+  use lil_cpu.common_tb_pkg.all;
+  use lil_cpu.reg_tb_pkg.all;
   use lil_cpu.lil_cpu_pkg.all;
-
-library work;
-  use work.reg_tb_pkg.all;
 
 entity reg_tb is
   generic (
