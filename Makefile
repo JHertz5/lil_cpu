@@ -17,7 +17,7 @@ PIP := $(VENV_DIR)/bin/pip
 $(VENV_DIR)/bin/activate :
 	$(PYTHON) -m venv $(VENV_DIR)
 	$(PIP) install --upgrade pip
-	$(PIP) install vsg
+	$(PIP) install -r ./util/python_tools.txt
 	@touch $(VENV_DIR)/bin/activate
 
 .PHONY : _venv
