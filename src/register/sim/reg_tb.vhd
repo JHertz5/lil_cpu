@@ -22,8 +22,6 @@ end entity;
 
 architecture tb of reg_tb is
 
-  constant c_clk_period : time := 10 ns;
-
   -- DUT signals
   signal i_clk       : std_logic;
   signal i_reset     : std_logic;
