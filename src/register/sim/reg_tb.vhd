@@ -57,16 +57,7 @@ begin
       o_data      => o_data
     );
 
-  -- ================================================
-  -- Clock Generation Process
-  -- ================================================
-  proc_clock : process
-  begin
-    i_clk <= '0';
-    wait for c_clk_period / 2;
-    i_clk <= '1';
-    wait for c_clk_period / 2;
-  end process;
+  dut_i_clk <= not dut_i_clk after c_clk_period / 2;
 
   -- ================================================
   -- Stimulus Process: Drives inputs based on commands from sequencer
