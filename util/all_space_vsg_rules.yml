@@ -1,0 +1,425 @@
+# Written for VSG v3.35.0
+rule:
+
+  ######################################################################################################################
+  # Group level rule settings
+  ######################################################################################################################
+
+  group:
+    # Set all alignment rules to use the same style by default.
+    alignment:
+      compact_alignment: true
+      blank_line_ends_group: true
+      comment_line_ends_group: true
+      separate_generic_port_alignment: true
+      if_control_statements_ends_group: true
+      case_control_statements_ends_group: true
+      generate_statements_ends_group: true
+      loop_control_statements_ends_group: true
+    # Set case rules to lowercase by default.
+    case:
+      case: 'lower'
+    # Set all indentation rules to use the same indentation size and style by default.
+    indent:
+      indent_size: 2
+      indent_style: spaces
+    # Set defaults for structure rules.
+    structure:
+      new_line_after_assign: 'ignore'
+    # Set optional items to be removed by default.
+    structure::optional:
+      action: 'remove'
+
+  ######################################################################################################################
+  ## Alignment rules
+  ######################################################################################################################
+
+  concurrent_003:
+    align_left: 'yes'
+    align_paren: 'no'
+  concurrent_009:
+    align_left: 'yes'
+    align_paren: 'no'
+    align_when_keywords: 'yes'
+    wrap_at_when: 'yes'
+    align_else_keywords: 'yes'
+  concurrent_400:
+    aggregate_parens_ends_group: 'yes'
+    ignore_single_line_aggregates: 'yes'
+  concurrent_401:
+    align_left: 'yes'
+    align_paren: 'no'
+  constant_012:
+    align_left: 'yes'
+    align_paren: 'no'
+  constant_014:
+    align_left: 'yes'
+    align_paren: 'no'
+  constant_400:
+    aggregate_parens_ends_group: 'yes'
+    ignore_single_line_aggregates: 'yes'
+  procedure_call_400:
+    align_left: 'yes'
+    align_paren: 'no'
+  sequential_400:
+    aggregate_parens_ends_group: 'yes'
+    ignore_single_line_aggregates: 'yes'
+  sequential_401:
+    align_left: 'yes'
+    align_paren: 'no'
+    align_when_keywords: 'yes'
+    wrap_at_when: 'yes'
+    align_else_keywords: 'yes'
+  sequential_402:
+    align_left: 'yes'
+    align_paren: 'no'
+  sequential_004:
+    align_left: 'yes'
+    align_paren: 'no'
+  signal_400:
+    align_left: 'yes'
+    align_paren: 'no'
+  variable_400:
+    align_left: 'yes'
+    align_paren: 'no'
+  variable_assignment_004:
+    align_left: 'yes'
+    align_paren: 'no'
+  variable_assignment_400:
+    align_left: 'yes'
+    align_paren: 'no'
+    align_when_keywords: 'yes'
+    wrap_at_when: 'yes'
+    align_else_keywords: 'yes'
+  variable_assignment_401:
+    align_left: 'yes'
+    align_paren: 'no'
+
+  ######################################################################################################################
+  # Blank line rules.
+  ######################################################################################################################
+
+  case_007:
+    style: allow_comment
+  case_009:
+    style: require_blank_line
+  case_200:
+    style: no_blank_line
+  function_006:
+    style: allow_comment
+  generate_004:
+    style: allow_comment
+  if_006:
+    disable: true
+  if_007:
+    disable: true
+  if_008:
+    disable: true
+  if_010:
+    disable: true
+  if_011:
+    disable: true
+  if_030:
+    disable: true
+  if_031:
+    disable: true
+  library_003:
+    allow_library_clause: true
+    style: allow_comment
+  library_007:
+    disable: true
+  loop_statement_200:
+    disable: true
+  loop_statement_201:
+    disable: true
+  loop_statement_202:
+    disable: true
+  loop_statement_203:
+    disable: true
+  procedure_200:
+    style: allow_comment
+  process_022:
+    disable: true
+  process_023:
+    disable: true
+  subtype_201:
+    disable: true
+  subtype_202:
+    disable: true
+  type_010:
+    disable: true
+  type_011:
+    disable: true
+
+  ######################################################################################################################
+  # Case rules. Make an exception for enumeration literals.
+  ######################################################################################################################
+
+  type_500:
+    case: 'upper'
+  bit_string_literal_501:
+    case: 'upper'
+  # This rule also modifies the case of record element names if the record element has the same name as an enumeration
+  # literal.
+  type_501:
+    disable: true
+  # Case rules are disabled for attributes since some tool attributes are case-sensitive.
+  attribute_declaration_501:
+    disable: true
+  attribute_specification_501:
+    disable: true
+
+  ######################################################################################################################
+  # Length rules. Disable length rules other than line length check.
+  ######################################################################################################################
+
+  length_001:
+    length: 120
+  length_002:
+    disable: true
+  length_003:
+    disable: true
+
+  ######################################################################################################################
+  ## Name prefix/suffix rules
+  ######################################################################################################################
+
+  constant_015:
+    prefixes: ['c_']
+    disable: false
+  generate_017:
+    prefixes: ['gen_']
+    disable: false
+  generate_601:
+    prefixes: ['gv_']
+    disable: false
+  generic_020:
+    prefixes: ['g_']
+    severity: Warning
+    disable: false
+  generic_map_601:
+    prefixes: ['g_']
+    severity: Warning
+    disable: false
+  instantiation_601:
+    prefixes: ['cmp_']
+    disable: false
+  loop_statement_600:
+    prefixes: ['loop_']
+    disable: false
+  loop_statement_602:
+    prefixes: ['lv_']
+    disable: false
+  package_016:
+    suffixes: ['_pkg']
+    disable: false
+  package_body_600:
+    suffixes: ['_pkg']
+    disable: false
+  package_instantiation_600:
+    suffixes: ['_pkg']
+    disable: false
+  port_011:
+    # m_ and s_ prefixes are required by Vivado's packaging tool for AXI signals.
+    prefixes: ['i_', 'o_', 'io_', 's_', 'm_']
+    severity: Warning
+    disable: false
+  process_036:
+    prefixes: ['proc_']
+    disable: false
+  subtype_004:
+    prefixes: ['t_']
+    disable: false
+  type_015:
+    prefixes: ['t_']
+    disable: false
+  variable_012:
+    prefixes: ['v_']
+    disable: false
+
+  ######################################################################################################################
+  ## Structure rules
+  ######################################################################################################################
+
+  architecture_010:
+    action: 'add'
+  block_comment_001:
+    allow_indenting: true
+    disable: false
+    header_left:
+    header_left_repeat: '-'
+    header_string:
+    header_right_repeat:
+    max_header_column: 120
+  block_comment_002:
+    allow_indenting: true
+    disable: false
+    comment_left:
+  block_comment_003:
+    allow_indenting: true
+    disable: false
+    footer_left:
+    footer_left_repeat: '-'
+    footer_string:
+    footer_right_repeat:
+    max_footer_column: 120
+  case_019:
+    disable: true
+  # Disable to allow inline comments
+  comment_011:
+    disable: true
+  comment_012:
+    disable: false
+  component_019:
+    severity: Warning
+  concurrent_012:
+    first_paren_new_line: 'no'
+    last_paren_new_line: 'yes'
+    open_paren_new_line: 'yes'
+    close_paren_new_line: 'yes'
+    new_line_after_comma: 'ignore_positional'
+    assign_on_single_line: 'ignore'
+    ignore_single_line: 'yes'
+  constant_016:
+    first_paren_new_line: 'no'
+    last_paren_new_line: 'yes'
+    open_paren_new_line: 'yes'
+    close_paren_new_line: 'yes'
+    new_line_after_comma: 'ignore_positional'
+    assign_on_single_line: 'ignore'
+    ignore_single_line: 'yes'
+  constant_017:
+    record_constraint_open_paren: 'remove_new_line'
+    record_constraint_close_paren: 'remove_new_line'
+    record_constraint_comma: 'remove_new_line'
+    record_constraint_element: 'add_new_line'
+  entity_015:
+    action: 'add'
+  function_018:
+    action: 'add'
+  function_019:
+    first_open_paren: 'remove_new_line'
+    last_close_paren: 'add_new_line'
+    interface_element_semicolon: 'remove_new_line'
+    interface_element: 'add_new_line'
+    ignore_single_line: 'no'
+  if_002:
+    parenthesis: 'remove'
+  instantiation_033:
+    disable: true
+  instantiation_036:
+    action: 'add'
+  instantiation_034:
+    method: 'entity'
+    severity: Warning
+  loop_statement_006:
+    severity: Warning
+  package_007:
+    action: 'add'
+  package_body_002:
+    action: 'add'
+  port_map_010:
+    severity: Warning
+  procedure_012:
+    action: 'add'
+  procedure_013:
+    first_open_paren: 'remove_new_line'
+    last_close_paren: 'add_new_line'
+    interface_element_semicolon: 'remove_new_line'
+    interface_element: 'add_new_line'
+    ignore_single_line: 'no'
+  procedure_call_003:
+    first_open_paren: 'remove_new_line'
+    last_close_paren: 'add_new_line'
+    association_element: 'add_new_line'
+    association_list_comma: 'remove_new_line'
+    ignore_single_line: 'yes'
+  process_029:
+    clock: 'edge'
+  sequential_009:
+    first_paren_new_line: 'no'
+    last_paren_new_line: 'yes'
+    open_paren_new_line: 'yes'
+    close_paren_new_line: 'yes'
+    new_line_after_comma: 'ignore_positional'
+    assign_on_single_line: 'ignore'
+    ignore_single_line: 'yes'
+  # Disable to allow default assignments.
+  port_012:
+    disable: true
+  signal_007:
+    disable: true
+  variable_007:
+    disable: true
+  signal_015:
+    consecutive: 1
+  signal_017:
+    record_constraint_open_paren: 'remove_new_line'
+    record_constraint_close_paren: 'remove_new_line'
+    record_constraint_comma: 'remove_new_line'
+    record_constraint_element: 'add_new_line'
+  variable_017:
+    record_constraint_open_paren: 'remove_new_line'
+    record_constraint_close_paren: 'remove_new_line'
+    record_constraint_comma: 'remove_new_line'
+    record_constraint_element: 'add_new_line'
+  sequential_006:
+    severity: Warning
+  variable_assignment_006:
+    severity: Warning
+  variable_assignment_008:
+    first_paren_new_line: 'no'
+    last_paren_new_line: 'yes'
+    open_paren_new_line: 'yes'
+    close_paren_new_line: 'yes'
+    new_line_after_comma: 'ignore_positional'
+    assign_on_single_line: 'ignore'
+    ignore_single_line: 'yes'
+
+  ######################################################################################################################
+  ## Whitespace rules
+  ######################################################################################################################
+
+  conditional_expressions_100:
+    number_of_spaces: ">=1"
+  conditional_expressions_102:
+    number_of_spaces: ">=1"
+  conditional_waveforms_100:
+    number_of_spaces: ">=1"
+  conditional_waveforms_102:
+    number_of_spaces: ">=1"
+  element_association_100:
+    number_of_spaces: ">=1"
+  element_association_101:
+    number_of_spaces: ">=1"
+  external_signal_name_102:
+    disable: true
+  port_007:
+    spaces_after: 2
+    spaces_before: 1
+  port_008:
+    spaces_after: 1
+    spaces_before: 1
+  procedure_100: # TODO We want the gap between procedure name and bracket this to be 0 but it breaks the rest of the procedure. Request feature.
+    number_of_spaces: 1
+  process_002:
+    number_of_spaces: 0
+  selected_assignment_106:
+    number_of_spaces: ">=1"
+  subtype_101:
+    number_of_spaces: ">=1"
+  type_006:
+    number_of_spaces: ">=1"
+
+########################################################################################################################
+## Indent behaviour modification for `library_008`
+########################################################################################################################
+
+indent:
+  tokens:
+    use_clause:
+      keyword:
+        token: current
+        after: current
+        token_after_library_clause: '+1'
+        token_if_no_matching_library_clause: current
