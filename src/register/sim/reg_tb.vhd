@@ -157,6 +157,8 @@ begin
 
     while test_suite loop
 
+      wait until rising_edge(dut_i_clk);
+
       -- Test 1: Reset clears register to zero
       if run("test_reset") then
         info("Running test_reset");
@@ -241,7 +243,6 @@ begin
 
     end loop;
 
-    wait for 100 ns;
     test_runner_cleanup(runner);
   end process;
 
