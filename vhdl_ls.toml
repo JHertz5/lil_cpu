@@ -1,0 +1,8 @@
+# The preferred case for completions.
+preferred_case = "lower"
+
+[libraries]
+lil_cpu.files = [
+  'src/**/hdl/*.vhd',
+  'src/**/sim/*.vhd'
+]
