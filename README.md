@@ -11,6 +11,18 @@ SAP-1's design is broken down into modules, as shown below:
 
 ![alt text](sap1_architecture.drawio.svg)
 
+## Control Signals
+
+The control signals in the diagram are labelled with two letters. The first letter in the name denotes the type of operation being performed, as defined in the table below.
+| Symbol | Control Signal |
+|---|---|
+| E | Enable output to the bus |
+| L | Load from the bus |
+| C | Count (i.e. Increment) (Program Counter only)|
+| S | Subtract rather than add (ALU only) |
+
+The second letter, in subscript, in each signal name denotes the module that the signal applies to, e.g P for Program Counter. The mapping between letters and modules is hopefully self-evident from the diagram.
+
 ## Deviations
 This design will not follow the SAP-1 design exactly. The following changes have been made.
 
