@@ -17,23 +17,23 @@ PIP := $(VENV_DIR)/bin/pip
 $(VENV_DIR)/bin/activate :
 	$(PYTHON) -m venv $(VENV_DIR)
 	$(PIP) install --upgrade pip
-	$(PIP) install vsg
+	$(PIP) install -r ./util/python_tools.txt
 	@touch $(VENV_DIR)/bin/activate
 
-.PHONY : _venv
-_venv : $(VENV_DIR)/bin/activate
+.PHONY : _set_up_tools
+_set_up_tools : $(VENV_DIR)/bin/activate
 
 VSG := $(VENV_DIR)/bin/vsg
 VHDL_FILES := $(shell find . -path './src/*' -name '*.vhd')
 VSG_BASE_ARGS := --configuration ./util/vsg_config.yml -f $(VHDL_FILES)
 
 .PHONY : vsg_check
-vsg_check : _venv
+vsg_check : _set_up_tools
 ## Check for formatting mistakes with VSG.
 	@$(VSG) $(VSG_BASE_ARGS)
 
 .PHONY : vsg_fix
-vsg_fix : _venv
+vsg_fix : _set_up_tools
 ## Fix formatting mistakes with VSG.
 	@$(VSG) $(VSG_BASE_ARGS) --fix
 
