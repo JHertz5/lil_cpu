@@ -1,6 +1,5 @@
 ------------------------------------------------------------------------------------------------------------------------
--- Testbench for reg.vhd using vunit
--- Tests reset behavior, input latching, output driving, and high-impedance control
+-- Testbench for reg.vhd.
 ------------------------------------------------------------------------------------------------------------------------
 
 library ieee;
@@ -23,12 +22,12 @@ end entity;
 architecture tb of reg_tb is
 
   -- DUT signals
-  signal i_clk       : std_logic;
-  signal i_reset     : std_logic;
-  signal i_input_en  : std_logic;
-  signal i_output_en : std_logic;
-  signal i_data      : t_bus_data;
-  signal o_data      : t_bus_data;
+  signal dut_i_clk       : std_logic := '0';
+  signal dut_i_reset     : std_logic;
+  signal dut_i_input_en  : std_logic;
+  signal dut_i_output_en : std_logic;
+  signal dut_i_data      : t_bus_data;
+  signal dut_o_data      : t_bus_data;
 
   -- Inter-process communication signals
   signal stimuli_cmd   : t_stimuli_cmd := CMD_IDLE;
@@ -41,37 +40,36 @@ architecture tb of reg_tb is
 
 begin
 
-  -- ================================================
+  ----------------------------------------------------------------------------------------------------------------------
   -- DUT Instantiation
-  -- ================================================
-  dut : entity lil_cpu.reg
-    generic map (
-      g_is_instruction_reg => false
-    )
+  ----------------------------------------------------------------------------------------------------------------------
+
+  cmp_dut : entity lil_cpu.reg(rtl)
     port map (
-      i_clk       => i_clk,
-      i_reset     => i_reset,
-      i_input_en  => i_input_en,
-      i_output_en => i_output_en,
-      i_data      => i_data,
-      o_data      => o_data
+      i_clk       => dut_i_clk,
+      i_reset     => dut_i_reset,
+      i_input_en  => dut_i_input_en,
+      i_output_en => dut_i_output_en,
+      i_data      => dut_i_data,
+      o_data      => dut_o_data
     );
 
   dut_i_clk <= not dut_i_clk after c_clk_period / 2;
 
-  -- ================================================
-  -- Stimulus Process: Drives inputs based on commands from sequencer
-  -- ================================================
+  ----------------------------------------------------------------------------------------------------------------------
+  -- Drive inputs based on commands from sequencer
+  ----------------------------------------------------------------------------------------------------------------------
+
   proc_stimulus : process
   begin
     -- Initialize inputs
-    i_reset     <= '0';
-    i_input_en  <= '0';
-    i_output_en <= '0';
-    i_data      <= (others => '0');
+    dut_i_reset     <= '0';
+    dut_i_input_en  <= '0';
+    dut_i_output_en <= '0';
+    dut_i_data      <= (others => '0');
 
     loop
-      wait until stimuli_cmd /= CMD_IDLE or rising_edge(i_clk);
+      wait until stimuli_cmd /= CMD_IDLE or rising_edge(dut_i_clk);
 
       case stimuli_cmd is
 
@@ -79,52 +77,53 @@ begin
           null;
 
         when CMD_RESET =>
-          i_reset <= '1';
-          wait until rising_edge(i_clk);
-          i_reset <= '0';
+          dut_i_reset <= '1';
+          wait until rising_edge(dut_i_clk);
+          dut_i_reset <= '0';
           stimuli_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           stimuli_ack <= '0';
 
         when CMD_LOAD_DATA =>
-          i_data     <= stimuli_param;
-          i_input_en <= '1';
-          wait until rising_edge(i_clk);
-          i_input_en <= '0';
-          i_data     <= (others => '0');
+          dut_i_data     <= stimuli_param;
+          dut_i_input_en <= '1';
+          wait until rising_edge(dut_i_clk);
+          dut_i_input_en <= '0';
+          dut_i_data     <= (others => '0');
           stimuli_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           stimuli_ack <= '0';
 
         when CMD_SET_OUTPUT_EN =>
-          i_output_en <= '1';
+          dut_i_output_en <= '1';
           stimuli_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           stimuli_ack <= '0';
 
         when CMD_SET_OUTPUT_DIS =>
-          i_output_en <= '0';
+          dut_i_output_en <= '0';
           stimuli_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           stimuli_ack <= '0';
 
         when CMD_WAIT_CYCLE =>
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           stimuli_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           stimuli_ack <= '0';
 
       end case;
     end loop;
   end process;
 
-  -- ================================================
-  -- Checker Process: Validates outputs based on commands from sequencer
-  -- ================================================
+  ----------------------------------------------------------------------------------------------------------------------
+  -- Validate outputs based on commands from sequencer
+  ----------------------------------------------------------------------------------------------------------------------
+
   proc_checker : process
   begin
 
-      wait until rising_edge(i_clk);
+      wait until rising_edge(dut_i_clk);
 
       case check_cmd is
 
@@ -132,24 +131,25 @@ begin
           null;
 
         when CMD_VERIFY_OUTPUT =>
-          check(o_data = check_param, "o_data mismatch: got " & to_string(o_data) & ", expected " & to_string(check_param));
+          check(dut_o_data = check_param, "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_param));
           check_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           check_ack <= '0';
 
         when CMD_VERIFY_HIGHZ =>
-          check(o_data = (o_data'range => 'Z'), "o_data should be high-Z, got " & to_string(o_data));
+          check(dut_o_data = (dut_o_data'range => 'Z'), "o_data should be high-Z, got " & to_string(dut_o_data));
           check_ack <= '1';
-          wait until rising_edge(i_clk);
+          wait until rising_edge(dut_i_clk);
           check_ack <= '0';
 
       end case;
 
   end process;
 
-  -- ================================================
-  -- Test Sequencer Process
-  -- ================================================
+  ----------------------------------------------------------------------------------------------------------------------
+  -- Test Sequencer
+  ----------------------------------------------------------------------------------------------------------------------
+
   proc_test_sequencer : process
   begin
     test_runner_setup(runner, runner_cfg);
