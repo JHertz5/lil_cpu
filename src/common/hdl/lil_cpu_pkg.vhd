@@ -9,6 +9,7 @@ use ieee.std_logic_1164.all;
 package lil_cpu_pkg is
 
     constant c_bus_width : natural := 8;
+    subtype t_bus_data is std_logic_vector(c_bus_width - 1 downto 0);
 
     --------------------------------------------------------------------------------------------------------------------
     -- Implement a bus transceiver. When not enabled, isolate the output from the input data, putting the output to
