@@ -13,5 +13,6 @@ For each module, I'd like to do the following tasks.
 [ ] Verification - A self-checking testbench to validate the operation of the module.
 
 # Stretch Goals
-- implement the [LC-3](https://en.wikipedia.org/wiki/Little_Computer_3) ISA.
-- implement a compiler from assembly to machine code.
+- Run the CPU on real hardware (maybe [FOMU](https://www.crowdsupply.com/sutajio-kosagi/fomu) or [iCEBreaker](https://1bitsquared.com/products/icebreaker).
+- Implement the [LC-3](https://en.wikipedia.org/wiki/Little_Computer_3) ISA.
+- Implement a compiler from assembly to machine code.
