@@ -3,24 +3,24 @@
 ------------------------------------------------------------------------------------------------------------------------
 
 library ieee;
-use ieee.std_logic_1164.all;
+  use ieee.std_logic_1164.all;
 
 library lil_cpu;
-use lil_cpu.lil_cpu_pkg.all;
+  use lil_cpu.lil_cpu_pkg.all;
 
 entity reg is
   generic (
     g_is_instruction_reg : boolean := false
   );
   port (
-    i_clk   : in std_logic;
-    i_reset : in std_logic;
-    i_input_en  : in std_logic;
-    i_output_en  : in std_logic;
-    i_data   : in t_bus_data;
-    o_data: out t_bus_data
+    i_clk       : in  std_logic;
+    i_reset     : in  std_logic;
+    i_input_en  : in  std_logic;
+    i_output_en : in  std_logic;
+    i_data      : in  t_bus_data;
+    o_data      : out t_bus_data
   );
-end entity reg;
+end entity;
 
 architecture rtl of reg is
 
@@ -28,7 +28,7 @@ architecture rtl of reg is
 
 begin
 
-  proc_reg : process (i_clk)
+  proc_reg : process(i_clk)
   begin
     if rising_edge(i_clk) then
 
@@ -45,8 +45,8 @@ begin
   -- TODO #21 handle the instruction register.
   -- Buffer the output data.
   o_data <= buffer_output_to_bus(
-    i_en => i_output_en,
-    i_data => data_internal
-  );
+      i_en   => i_output_en,
+      i_data => data_internal
+    );
 
 end architecture;
