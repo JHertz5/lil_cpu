@@ -132,7 +132,7 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '0';
-        verify_output(t_bus_data'(others => 'Z'), dut_o_data);
+        verify_output(dut_o_data, t_bus_data'(others => 'Z'));
       end if;
 
       -- Test 4: Output reflects internal data when enabled.
@@ -169,7 +169,7 @@ begin
         dut_i_output_en <= '1';
         verify_output(dut_o_data, v_exp_data);
         dut_i_output_en <= '0';
-        verify_output(t_bus_data'(others => 'Z'), dut_o_data);
+        verify_output(dut_o_data, t_bus_data'(others => 'Z'));
         dut_i_output_en <= '1';
         verify_output(dut_o_data, v_exp_data);
         generate_random_slv(v_exp_data);
