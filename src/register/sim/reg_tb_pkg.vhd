@@ -59,11 +59,6 @@ package reg_tb_pkg is
     signal check_cmd : out t_check_cmd
   );
 
-  -- Utility procedures
-  procedure clock_sync (
-    signal clk : in std_logic
-  );
-
 end package;
 
 package body reg_tb_pkg is
@@ -142,13 +137,6 @@ package body reg_tb_pkg is
     check_cmd <= CMD_VERIFY_HIGHZ;
     wait until check_ack = '1';
     check_cmd <= CMD_IDLE;
-  end procedure;
-
-  procedure clock_sync (
-    signal clk : in std_logic
-  ) is
-  begin
-    wait until rising_edge(clk);
   end procedure;
 
 end package body;
