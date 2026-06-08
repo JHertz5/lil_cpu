@@ -23,7 +23,7 @@ package common_tb_pkg is
   ----------------------------------------------------------------------------------------------------------------------
   -- Check the expected result against the actual.
   ----------------------------------------------------------------------------------------------------------------------
-  procedure verify_output (
+  procedure check_slv (
     i_actual   : in  std_logic_vector;
     i_expected : in  std_logic_vector
   );
@@ -50,7 +50,7 @@ package body common_tb_pkg is
 
   end procedure;
 
-  procedure verify_output (
+  procedure check_slv (
     i_actual   : in  std_logic_vector;
     i_expected : in  std_logic_vector
   ) is
