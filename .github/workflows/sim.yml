@@ -1,0 +1,21 @@
+name: sim
+
+on:
+  workflow_call:
+
+jobs:
+  vsg_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Set up tools
+        run: make _set_up_tools
+
+      - name: Run the self-checking testbenches
+        run: make test
