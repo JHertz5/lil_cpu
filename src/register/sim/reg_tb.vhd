@@ -14,7 +14,7 @@ library lil_cpu;
 
 entity reg_tb is
   generic (
-    runner_cfg : runner_cfg_t := runner_cfg_default
+    runner_cfg : runner_cfg_t := runner_cfg_defaul
   );
 end entity;
 
