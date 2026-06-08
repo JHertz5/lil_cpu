@@ -84,9 +84,6 @@ begin
           dut_i_reset <= '1';
           wait until rising_edge(dut_i_clk);
           dut_i_reset <= '0';
-          stimuli_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          stimuli_ack <= '0';
 
         when CMD_LOAD_DATA =>
           dut_i_data     <= stimuli_param;
@@ -94,29 +91,25 @@ begin
           wait until rising_edge(dut_i_clk);
           dut_i_input_en <= '0';
           dut_i_data     <= (others => '0');
-          stimuli_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          stimuli_ack <= '0';
 
         when CMD_SET_OUTPUT_EN =>
           dut_i_output_en <= '1';
-          stimuli_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          stimuli_ack <= '0';
 
         when CMD_SET_OUTPUT_DIS =>
           dut_i_output_en <= '0';
-          stimuli_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          stimuli_ack <= '0';
 
         when CMD_WAIT_CYCLE =>
           wait until rising_edge(dut_i_clk);
+
+      end case;
+
+      -- End by acknowledging that the stimulus command has been completed.
+      if stimuli_cmd /= CMD_IDLE then
           stimuli_ack <= '1';
           wait until rising_edge(dut_i_clk);
           stimuli_ack <= '0';
+      end if;
 
-      end case;
     end loop;
   end process;
 
