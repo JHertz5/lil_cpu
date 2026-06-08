@@ -12,7 +12,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.x'
 
       - name: Set up tools
         run: make _set_up_tools
@@ -22,5 +22,6 @@ jobs:
         with:
           version: latest
 
-      - name: Run the self-checking testbenches
-        run: make test
+      - uses: VUnit/vunit_action@v0.1.0
+        with:
+          run_file: test/run.py
