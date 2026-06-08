@@ -8,3 +8,6 @@ on:
 jobs:
   style:
     uses: ./.github/workflows/style.yml
+
+  sim:
+    uses: ./.github/workflows/sim.yml
