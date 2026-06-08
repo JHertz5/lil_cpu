@@ -34,9 +34,8 @@ architecture tb of reg_tb is
   signal stimuli_data : t_bus_data    := (others => '0');
   signal stimuli_ack  : std_logic     := '0';
 
-  signal check_cmd  : t_check_cmd := CMD_IDLE;
-  signal check_data : t_bus_data  := (others => '0');
-  signal check_ack  : std_logic   := '0';
+  signal check_cmd : t_check_cmd := c_check_cmd_init;
+  signal check_ack : std_logic   := '0';
 
 begin
 
@@ -63,7 +62,6 @@ begin
   ----------------------------------------------------------------------------------------------------------------------
   -- Drive inputs based on commands from sequencer.
   ----------------------------------------------------------------------------------------------------------------------
-
   proc_stimulus : process
   begin
     -- Initialize inputs
@@ -114,45 +112,30 @@ begin
   end process;
 
   ----------------------------------------------------------------------------------------------------------------------
-  -- Validate outputs based on commands from sequencer.
+  -- Validate outputs
   ----------------------------------------------------------------------------------------------------------------------
-
   proc_checker : process
   begin
 
     wait until rising_edge(dut_i_clk);
 
-    case check_cmd is
+    if not check_cmd.is_idle then
 
-      when CMD_IDLE =>
-        null;
+      check(
+        dut_o_data = check_cmd.data,
+        "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_cmd.data)
+      );
+      check_ack <= '1';
+      wait until rising_edge(dut_i_clk);
+      check_ack <= '0';
 
-      when CMD_VERIFY_OUTPUT =>
-        check(
-          dut_o_data = check_data,
-          "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_data)
-        );
-        check_ack <= '1';
-        wait until rising_edge(dut_i_clk);
-        check_ack <= '0';
-
-      when CMD_VERIFY_HIGHZ =>
-        check(
-            dut_o_data = (dut_o_data'range => 'Z'),
-            "o_data should be high-Z, got " & to_string(dut_o_data)
-          );
-        check_ack <= '1';
-        wait until rising_edge(dut_i_clk);
-        check_ack <= '0';
-
-    end case;
+    end if;
 
   end process;
 
   ----------------------------------------------------------------------------------------------------------------------
   -- Test Sequencer.
   ----------------------------------------------------------------------------------------------------------------------
-
   proc_test_sequencer : process
 
     variable v_exp_data : t_bus_data;
@@ -185,8 +168,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         trigger_reset(
           i_ack => stimuli_ack,
@@ -196,8 +178,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
       end if;
 
@@ -222,8 +203,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         v_exp_data := x"AA";
         load_register(
@@ -235,8 +215,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
       end if;
 
@@ -258,9 +237,10 @@ begin
           i_ack => stimuli_ack,
           o_cmd => stimuli_cmd
         );
-        verify_highz(
-          i_ack => check_ack,
-          o_cmd => check_cmd
+        verify_output(
+          i_ack      => check_ack,
+          i_exp_data => (others => 'Z'),
+          o_cmd      => check_cmd
         );
       end if;
 
@@ -285,8 +265,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
       end if;
 
@@ -311,8 +290,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         -- Wait multiple cycles without loading new data.
         wait_clock_cycle(
@@ -322,8 +300,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         wait_clock_cycle(
           i_ack => stimuli_ack,
@@ -332,8 +309,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
       end if;
 
@@ -358,16 +334,16 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         set_output_disabled(
           i_ack => stimuli_ack,
           o_cmd => stimuli_cmd
         );
-        verify_highz(
-          i_ack => check_ack,
-          o_cmd => check_cmd
+        verify_output(
+          i_ack      => check_ack,
+          i_exp_data => (others => 'Z'),
+          o_cmd      => check_cmd
         );
         set_output_enabled(
           i_ack => stimuli_ack,
@@ -376,8 +352,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         v_exp_data := x"22";
         load_register(
@@ -389,8 +364,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
       end if;
 
@@ -415,8 +389,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
         -- Load new value while output is enabled.
         v_exp_data := x"88";
@@ -430,8 +403,7 @@ begin
         verify_output(
           i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd      => check_cmd,
-          o_exp_data => check_data
+          o_cmd      => check_cmd
         );
       end if;
 
