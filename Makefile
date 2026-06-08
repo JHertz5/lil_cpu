@@ -26,7 +26,7 @@ _set_up_tools : $(VENV_DIR)/bin/activate
 .PHONY : test
 test: _set_up_tools
 # Run testbenches.
-	@./test/run.py --clean
+	@$(VENV_DIR)/bin/python ./test/run.py --clean
 
 VSG := $(VENV_DIR)/bin/vsg
 VHDL_FILES := $(shell find . -path './src/*' -name '*.vhd')
