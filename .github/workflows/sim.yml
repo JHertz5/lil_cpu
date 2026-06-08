@@ -21,8 +21,6 @@ jobs:
         uses: nickg/setup-nvc@v1
         with:
           version: latest
-        run: |
-          nvc --version
 
       - name: Run the self-checking testbenches
         run: make test
