@@ -24,4 +24,4 @@ jobs:
 
       - uses: VUnit/vunit_action@v0.1.0
         with:
-          cmd: test/run.py
+          run_file: test/run.py
