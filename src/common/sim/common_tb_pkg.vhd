@@ -64,7 +64,7 @@ package body common_tb_pkg is
 
     -- Run a few 0 ns waits to settle the delta delays.
     for lv_iteration in natural range 1 to c_num_delta_settling_iterations loop
-    wait for 0 ns;
+      wait for 0 ns;
     end loop;
     check((i_actual = i_expected), c_msg);
 
