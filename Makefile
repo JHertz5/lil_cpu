@@ -27,13 +27,18 @@ VSG := $(VENV_DIR)/bin/vsg
 VHDL_FILES := $(shell find . -path './src/*' -name '*.vhd')
 VSG_BASE_ARGS := --configuration ./util/vsg_config.yml -f $(VHDL_FILES)
 
+.PHONY : test
+test: _set_up_tools
+# Run testbenches.
+	@./test/run.py --clean
+
 .PHONY : vsg_check
-vsg_check : _set_up_tools
+vsg_check: _set_up_tools
 ## Check for formatting mistakes with VSG.
 	@$(VSG) $(VSG_BASE_ARGS)
 
 .PHONY : vsg_fix
-vsg_fix : _set_up_tools
+vsg_fix: _set_up_tools
 ## Fix formatting mistakes with VSG.
 	@$(VSG) $(VSG_BASE_ARGS) --fix
 
