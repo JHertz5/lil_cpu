@@ -21,7 +21,7 @@ package reg_tb_pkg is
   );
 
   procedure load_register (
-    data               : in  t_bus_data;
+    constant data               : in  t_bus_data;
     signal stimuli_cmd : out t_stimuli_cmd;
     signal stimuli_param : out t_bus_data;
     signal stimuli_ack : in  std_logic
@@ -44,7 +44,7 @@ package reg_tb_pkg is
 
   -- Checker procedures: Verify outputs from DUT
   procedure verify_output (
-    expected           : in  t_bus_data;
+    constant expected           : in  t_bus_data;
     signal check_cmd : out t_check_cmd;
     signal check_param : out t_bus_data;
     signal check_ack : in  std_logic
@@ -75,7 +75,7 @@ package body reg_tb_pkg is
   end procedure;
 
   procedure load_register (
-    data               : in  t_bus_data;
+    constant data               : in  t_bus_data;
     signal stimuli_cmd : out t_stimuli_cmd;
     signal stimuli_param : out t_bus_data;
     signal stimuli_ack : in  std_logic
@@ -118,7 +118,7 @@ package body reg_tb_pkg is
   end procedure;
 
   procedure verify_output (
-    expected           : in  t_bus_data;
+    constant expected           : in  t_bus_data;
     signal check_cmd : out t_check_cmd;
     signal check_param : out t_bus_data;
     signal check_ack : in  std_logic
