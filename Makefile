@@ -30,7 +30,7 @@ VSG_BASE_ARGS := --configuration ./util/vsg_config.yml -f $(VHDL_FILES)
 .PHONY : test
 test: _set_up_tools
 # Run testbenches.
-	@./test/run.py
+	@./test/run.py --clean
 
 .PHONY : vsg_check
 vsg_check: _set_up_tools
