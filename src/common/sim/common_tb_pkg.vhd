@@ -55,10 +55,17 @@ package body common_tb_pkg is
     i_expected : in  std_logic_vector
   ) is
 
+    -- Each iteration clears one delta cycle.
+    constant c_num_delta_settling_iterations : natural := 10;
+
     constant c_msg : string := "o_data mismatch: got " & to_string(i_actual) & ", expected " & to_string(i_expected);
 
   begin
 
+    -- Run a few 0 ns waits to settle the delta delays.
+    for lv_iteration in natural range 1 to c_num_delta_settling_iterations loop
+    wait for 0 ns;
+    end loop;
     check((i_actual = i_expected), c_msg);
 
   end procedure;
