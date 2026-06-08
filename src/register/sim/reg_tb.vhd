@@ -30,13 +30,13 @@ architecture tb of reg_tb is
   signal dut_o_data      : t_bus_data;
 
   -- Inter-process communication signals.
-  signal stimuli_cmd   : t_stimuli_cmd := CMD_IDLE;
+  signal stimuli_cmd  : t_stimuli_cmd := CMD_IDLE;
   signal stimuli_data : t_bus_data    := (others => '0');
-  signal stimuli_ack   : std_logic     := '0';
+  signal stimuli_ack  : std_logic     := '0';
 
-  signal check_cmd   : t_check_cmd  := CMD_IDLE;
-  signal check_data : t_bus_data   := (others => '0');
-  signal check_ack   : std_logic    := '0';
+  signal check_cmd  : t_check_cmd := CMD_IDLE;
+  signal check_data : t_bus_data  := (others => '0');
+  signal check_ack  : std_logic   := '0';
 
 begin
 
@@ -105,9 +105,9 @@ begin
 
       -- End by acknowledging that the stimulus command has been completed.
       if stimuli_cmd /= CMD_IDLE then
-          stimuli_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          stimuli_ack <= '0';
+        stimuli_ack <= '1';
+        wait until rising_edge(dut_i_clk);
+        stimuli_ack <= '0';
       end if;
 
     end loop;
@@ -120,32 +120,32 @@ begin
   proc_checker : process
   begin
 
-      wait until rising_edge(dut_i_clk);
+    wait until rising_edge(dut_i_clk);
 
-      case check_cmd is
+    case check_cmd is
 
-        when CMD_IDLE =>
-          null;
+      when CMD_IDLE =>
+        null;
 
-        when CMD_VERIFY_OUTPUT =>
-          check(
-            dut_o_data = check_data,
-            "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_data)
-          );
-          check_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          check_ack <= '0';
+      when CMD_VERIFY_OUTPUT =>
+        check(
+          dut_o_data = check_data,
+          "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_data)
+        );
+        check_ack <= '1';
+        wait until rising_edge(dut_i_clk);
+        check_ack <= '0';
 
-        when CMD_VERIFY_HIGHZ =>
-          check(
+      when CMD_VERIFY_HIGHZ =>
+        check(
             dut_o_data = (dut_o_data'range => 'Z'),
             "o_data should be high-Z, got " & to_string(dut_o_data)
           );
-          check_ack <= '1';
-          wait until rising_edge(dut_i_clk);
-          check_ack <= '0';
+        check_ack <= '1';
+        wait until rising_edge(dut_i_clk);
+        check_ack <= '0';
 
-      end case;
+    end case;
 
   end process;
 
@@ -169,9 +169,9 @@ begin
         info("Running test_reset");
         v_exp_data := x"AA";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         wait_clock_cycle(
@@ -183,9 +183,9 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         trigger_reset(
@@ -194,9 +194,9 @@ begin
         );
         v_exp_data := x"00";
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
       end if;
@@ -210,9 +210,9 @@ begin
         );
         v_exp_data := x"55";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         set_output_enabled(
@@ -220,22 +220,22 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         v_exp_data := x"AA";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
       end if;
@@ -249,9 +249,9 @@ begin
         );
         v_exp_data := x"CC";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         set_output_disabled(
@@ -273,9 +273,9 @@ begin
         );
         v_exp_data := x"DD";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         set_output_enabled(
@@ -283,9 +283,9 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
       end if;
@@ -299,9 +299,9 @@ begin
         );
         v_exp_data := x"77";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         set_output_enabled(
@@ -309,9 +309,9 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         -- Wait multiple cycles without loading new data.
@@ -320,9 +320,9 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         wait_clock_cycle(
@@ -330,9 +330,9 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
       end if;
@@ -346,9 +346,9 @@ begin
         );
         v_exp_data := x"11";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         set_output_enabled(
@@ -356,9 +356,9 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         set_output_disabled(
@@ -374,22 +374,22 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         v_exp_data := x"22";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
       end if;
@@ -403,9 +403,9 @@ begin
         );
         v_exp_data := x"FF";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         set_output_enabled(
@@ -413,24 +413,24 @@ begin
           o_cmd => stimuli_cmd
         );
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
         -- Load new value while output is enabled.
         v_exp_data := x"88";
         load_register(
-          i_ack => stimuli_ack,
+          i_ack       => stimuli_ack,
           i_load_data => v_exp_data,
-          o_cmd => stimuli_cmd,
+          o_cmd       => stimuli_cmd,
           o_load_data => stimuli_data
         );
         -- Output should now reflect new value.
         verify_output(
-          i_ack => check_ack,
+          i_ack      => check_ack,
           i_exp_data => v_exp_data,
-          o_cmd => check_cmd,
+          o_cmd      => check_cmd,
           o_exp_data => check_data
         );
       end if;

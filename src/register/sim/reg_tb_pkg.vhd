@@ -23,10 +23,10 @@ package reg_tb_pkg is
   );
 
   procedure load_register (
-    signal i_ack : in  std_logic;
+    signal i_ack         : in  std_logic;
     constant i_load_data : in  t_bus_data;
-    signal o_cmd : out t_stimuli_cmd;
-    signal o_load_data : out t_bus_data
+    signal o_cmd         : out t_stimuli_cmd;
+    signal o_load_data   : out t_bus_data
   );
 
   procedure set_output_enabled (
@@ -48,10 +48,10 @@ package reg_tb_pkg is
   -- Checker procedures: Verify outputs from DUT.
   ----------------------------------------------------------------------------------------------------------------------
   procedure verify_output (
-    signal i_ack : in  std_logic;
-    constant i_exp_data           : in  t_bus_data;
-    signal o_cmd : out t_check_cmd;
-    signal o_exp_data : out t_bus_data
+    signal i_ack        : in  std_logic;
+    constant i_exp_data : in  t_bus_data;
+    signal o_cmd        : out t_check_cmd;
+    signal o_exp_data   : out t_bus_data
   );
 
   procedure verify_highz (
@@ -68,22 +68,26 @@ package body reg_tb_pkg is
     signal o_cmd : out t_stimuli_cmd
   ) is
   begin
+
     o_cmd <= CMD_RESET;
     wait until i_ack = '1';
     o_cmd <= CMD_IDLE;
+
   end procedure;
 
   procedure load_register (
-    signal i_ack : in  std_logic;
-    constant i_load_data               : in  t_bus_data;
-    signal o_cmd : out t_stimuli_cmd;
-    signal o_load_data : out t_bus_data
+    signal i_ack         : in  std_logic;
+    constant i_load_data : in  t_bus_data;
+    signal o_cmd         : out t_stimuli_cmd;
+    signal o_load_data   : out t_bus_data
   ) is
   begin
+
     o_load_data <= i_load_data;
-    o_cmd   <= CMD_LOAD_DATA;
+    o_cmd       <= CMD_LOAD_DATA;
     wait until i_ack = '1';
-    o_cmd <= CMD_IDLE;
+    o_cmd       <= CMD_IDLE;
+
   end procedure;
 
   procedure set_output_enabled (
@@ -91,9 +95,11 @@ package body reg_tb_pkg is
     signal o_cmd : out t_stimuli_cmd
   ) is
   begin
+
     o_cmd <= CMD_SET_OUTPUT_EN;
     wait until i_ack = '1';
     o_cmd <= CMD_IDLE;
+
   end procedure;
 
   procedure set_output_disabled (
@@ -101,9 +107,11 @@ package body reg_tb_pkg is
     signal o_cmd : out t_stimuli_cmd
   ) is
   begin
+
     o_cmd <= CMD_SET_OUTPUT_DIS;
     wait until i_ack = '1';
     o_cmd <= CMD_IDLE;
+
   end procedure;
 
   procedure wait_clock_cycle (
@@ -111,22 +119,26 @@ package body reg_tb_pkg is
     signal o_cmd : out t_stimuli_cmd
   ) is
   begin
+
     o_cmd <= CMD_WAIT_CYCLE;
     wait until i_ack = '1';
     o_cmd <= CMD_IDLE;
+
   end procedure;
 
   procedure verify_output (
-    signal i_ack : in  std_logic;
-    constant i_exp_data           : in  t_bus_data;
-    signal o_cmd : out t_check_cmd;
-    signal o_exp_data : out t_bus_data
+    signal i_ack        : in  std_logic;
+    constant i_exp_data : in  t_bus_data;
+    signal o_cmd        : out t_check_cmd;
+    signal o_exp_data   : out t_bus_data
   ) is
   begin
+
     o_exp_data <= i_exp_data;
-    o_cmd   <= CMD_VERIFY_OUTPUT;
+    o_cmd      <= CMD_VERIFY_OUTPUT;
     wait until i_ack = '1';
-    o_cmd <= CMD_IDLE;
+    o_cmd      <= CMD_IDLE;
+
   end procedure;
 
   procedure verify_highz (
@@ -134,9 +146,11 @@ package body reg_tb_pkg is
     signal o_cmd : out t_check_cmd
   ) is
   begin
+
     o_cmd <= CMD_VERIFY_HIGHZ;
     wait until i_ack = '1';
     o_cmd <= CMD_IDLE;
+
   end procedure;
 
 end package body;
