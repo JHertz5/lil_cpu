@@ -195,6 +195,7 @@ rule:
     disable: false
   generic_020:
     prefixes: ['g_']
+    exceptions: ['runner_cfg']
     severity: Warning
     disable: false
   generic_map_601:
