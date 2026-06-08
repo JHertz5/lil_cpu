@@ -24,8 +24,8 @@ package common_tb_pkg is
   -- Check the expected result against the actual.
   ----------------------------------------------------------------------------------------------------------------------
   procedure verify_output (
-    i_expected : in  std_logic_vector;
-    i_actual   : in  std_logic_vector
+    i_actual   : in  std_logic_vector;
+    i_expected : in  std_logic_vector
   );
 
 end package;
@@ -51,8 +51,8 @@ package body common_tb_pkg is
   end procedure;
 
   procedure verify_output (
-    i_expected : in  std_logic_vector;
-    i_actual   : in  std_logic_vector
+    i_actual   : in  std_logic_vector;
+    i_expected : in  std_logic_vector
   ) is
 
     constant c_msg : string := "o_data mismatch: got " & to_string(i_actual) & ", expected " & to_string(i_expected);

@@ -106,10 +106,10 @@ begin
         load_register(v_exp_data);
         wait until rising_edge(dut_i_clk);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
         trigger_reset;
         v_exp_data      := x"00";
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
       end if;
 
       -- Test 2: Data latches on rising edge when input enabled.
@@ -119,10 +119,10 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
       end if;
 
       -- Test 3: Output is high-Z when output disabled.
@@ -132,7 +132,7 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '0';
-        verify_output((others => 'Z'), dut_o_data);
+        verify_output(t_bus_data'(others => 'Z'), dut_o_data);
       end if;
 
       -- Test 4: Output reflects internal data when enabled.
@@ -142,7 +142,7 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
       end if;
 
       -- Test 5: Register holds data when input disabled.
@@ -152,11 +152,11 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
         -- Wait multiple cycles without loading new data.
         for lv_iteration in natural range 9 downto 0 loop
           wait until rising_edge(dut_i_clk);
-          verify_output(v_exp_data, dut_o_data);
+          verify_output(dut_o_data, v_exp_data);
         end loop;
       end if;
 
@@ -167,14 +167,14 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
         dut_i_output_en <= '0';
-        verify_output((others => 'Z'), dut_o_data);
+        verify_output(t_bus_data'(others => 'Z'), dut_o_data);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
       end if;
 
       -- Test 7: Simultaneous input and output.
@@ -184,12 +184,12 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
         -- Load new value while output is enabled.
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         -- Output should now reflect new value.
-        verify_output(v_exp_data, dut_o_data);
+        verify_output(dut_o_data, v_exp_data);
       end if;
 
     end loop;
