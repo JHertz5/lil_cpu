@@ -23,14 +23,14 @@ $(VENV_DIR)/bin/activate :
 .PHONY : _set_up_tools
 _set_up_tools : $(VENV_DIR)/bin/activate
 
-VSG := $(VENV_DIR)/bin/vsg
-VHDL_FILES := $(shell find . -path './src/*' -name '*.vhd')
-VSG_BASE_ARGS := --configuration ./util/vsg_config.yml -f $(VHDL_FILES)
-
 .PHONY : test
 test: _set_up_tools
 # Run testbenches.
 	@./test/run.py --clean
+
+VSG := $(VENV_DIR)/bin/vsg
+VHDL_FILES := $(shell find . -path './src/*' -name '*.vhd')
+VSG_BASE_ARGS := --configuration ./util/vsg_config.yml -f $(VHDL_FILES)
 
 .PHONY : vsg_check
 vsg_check: _set_up_tools
