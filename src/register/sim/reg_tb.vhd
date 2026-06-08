@@ -158,83 +158,83 @@ begin
       -- Test 1: Reset clears register to zero.
       if run("test_reset") then
         info("Running test_reset");
-        load_register(x"AA", stimuli_cmd, stimuli_param, stimuli_ack);
-        wait_clock_cycle(stimuli_cmd, stimuli_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"AA", check_cmd, check_param, check_ack);
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        verify_output(x"00", check_cmd, check_param, check_ack);
+        load_register(stimuli_ack, x"AA", stimuli_cmd, stimuli_param);
+        wait_clock_cycle(stimuli_ack, stimuli_cmd);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"AA", check_cmd, check_param);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"00", check_cmd, check_param);
       end if;
 
       -- Test 2: Data latches on rising edge when input enabled.
       if run("test_input_latching") then
         info("Running test_input_latching");
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        load_register(x"55", stimuli_cmd, stimuli_param, stimuli_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"55", check_cmd, check_param, check_ack);
-        load_register(x"AA", stimuli_cmd, stimuli_param, stimuli_ack);
-        verify_output(x"AA", check_cmd, check_param, check_ack);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(stimuli_ack, x"55", stimuli_cmd, stimuli_param);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"55", check_cmd, check_param);
+        load_register(stimuli_ack, x"AA", stimuli_cmd, stimuli_param);
+        verify_output(check_ack, x"AA", check_cmd, check_param);
       end if;
 
       -- Test 3: Output is high-Z when output disabled.
       if run("test_output_disabled_highz") then
         info("Running test_output_disabled_highz");
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        load_register(x"CC", stimuli_cmd, stimuli_param, stimuli_ack);
-        set_output_disabled(stimuli_cmd, stimuli_ack);
-        verify_highz(check_cmd, check_ack);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(stimuli_ack, x"CC", stimuli_cmd, stimuli_param);
+        set_output_disabled(stimuli_ack, stimuli_cmd);
+        verify_highz(check_ack, check_cmd);
       end if;
 
       -- Test 4: Output reflects internal data when enabled.
       if run("test_output_enabled") then
         info("Running test_output_enabled");
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        load_register(x"DD", stimuli_cmd, stimuli_param, stimuli_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"DD", check_cmd, check_param, check_ack);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(stimuli_ack, x"DD", stimuli_cmd, stimuli_param);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"DD", check_cmd, check_param);
       end if;
 
       -- Test 5: Register holds data when input disabled.
       if run("test_input_disabled_holds_data") then
         info("Running test_input_disabled_holds_data");
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        load_register(x"77", stimuli_cmd, stimuli_param, stimuli_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"77", check_cmd, check_param, check_ack);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(stimuli_ack, x"77", stimuli_cmd, stimuli_param);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"77", check_cmd, check_param);
         -- Wait multiple cycles without loading new data.
-        wait_clock_cycle(stimuli_cmd, stimuli_ack);
-        verify_output(x"77", check_cmd, check_param, check_ack);
-        wait_clock_cycle(stimuli_cmd, stimuli_ack);
-        verify_output(x"77", check_cmd, check_param, check_ack);
+        wait_clock_cycle(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"77", check_cmd, check_param);
+        wait_clock_cycle(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"77", check_cmd, check_param);
       end if;
 
       -- Test 6: Sequential operations.
       if run("test_sequential_operations") then
         info("Running test_sequential_operations");
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        load_register(x"11", stimuli_cmd, stimuli_param, stimuli_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"11", check_cmd, check_param, check_ack);
-        set_output_disabled(stimuli_cmd, stimuli_ack);
-        verify_highz(check_cmd, check_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"11", check_cmd, check_param, check_ack);
-        load_register(x"22", stimuli_cmd, stimuli_param, stimuli_ack);
-        verify_output(x"22", check_cmd, check_param, check_ack);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(stimuli_ack, x"11", stimuli_cmd, stimuli_param);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"11", check_cmd, check_param);
+        set_output_disabled(stimuli_ack, stimuli_cmd);
+        verify_highz(check_ack, check_cmd);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"11", check_cmd, check_param);
+        load_register(stimuli_ack, x"22", stimuli_cmd, stimuli_param);
+        verify_output(check_ack, x"22", check_cmd, check_param);
       end if;
 
       -- Test 7: Simultaneous input and output.
       if run("test_simultaneous_input_output") then
         info("Running test_simultaneous_input_output");
-        trigger_reset(stimuli_cmd, stimuli_ack);
-        load_register(x"FF", stimuli_cmd, stimuli_param, stimuli_ack);
-        set_output_enabled(stimuli_cmd, stimuli_ack);
-        verify_output(x"FF", check_cmd, check_param, check_ack);
+        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(stimuli_ack, x"FF", stimuli_cmd, stimuli_param);
+        set_output_enabled(stimuli_ack, stimuli_cmd);
+        verify_output(check_ack, x"FF", check_cmd, check_param);
         -- Load new value while output is enabled.
-        load_register(x"88", stimuli_cmd, stimuli_param, stimuli_ack);
+        load_register(stimuli_ack, x"88", stimuli_cmd, stimuli_param);
         -- Output should now reflect new value.
-        verify_output(x"88", check_cmd, check_param, check_ack);
+        verify_output(check_ack, x"88", check_cmd, check_param);
       end if;
 
     end loop;
