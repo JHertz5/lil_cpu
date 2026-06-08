@@ -22,5 +22,6 @@ jobs:
         with:
           version: latest
 
-      - name: Run the self-checking testbenches
-        run: make test
+      - uses: VUnit/vunit_action@v0.1.0
+        with:
+          cmd: test/run.py
