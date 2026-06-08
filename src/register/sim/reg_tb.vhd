@@ -53,13 +53,12 @@ begin
   ----------------------------------------------------------------------------------------------------------------------
   -- Test Sequencer.
   ----------------------------------------------------------------------------------------------------------------------
+
   proc_test_sequencer : process
 
     variable v_exp_data : t_bus_data;
 
-    --------------------------------------------------------------------------------------------------------------------
     -- Reset the register.
-    --------------------------------------------------------------------------------------------------------------------
     procedure trigger_reset is
     begin
 
@@ -69,9 +68,7 @@ begin
 
     end procedure;
 
-    --------------------------------------------------------------------------------------------------------------------
     -- Load new data into the register.
-    --------------------------------------------------------------------------------------------------------------------
     procedure load_register (
       constant i_load_data : in  t_bus_data
     ) is
@@ -154,7 +151,7 @@ begin
         dut_i_output_en <= '1';
         check_slv(dut_o_data, v_exp_data);
         -- Wait multiple cycles without loading new data.
-        for lv_iteration in natural range 9 downto 0 loop
+        for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
           check_slv(dut_o_data, v_exp_data);
         end loop;

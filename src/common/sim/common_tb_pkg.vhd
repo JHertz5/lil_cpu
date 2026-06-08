@@ -13,16 +13,12 @@ package common_tb_pkg is
 
   constant c_clk_period : time := 1 ns;
 
-  ----------------------------------------------------------------------------------------------------------------------
   -- Generate a random std_logic_vector.
-  ----------------------------------------------------------------------------------------------------------------------
   procedure generate_random_slv (
     variable o_result : out std_logic_vector
   );
 
-  ----------------------------------------------------------------------------------------------------------------------
   -- Check the expected result against the actual.
-  ----------------------------------------------------------------------------------------------------------------------
   procedure check_slv (
     i_actual   : in  std_logic_vector;
     i_expected : in  std_logic_vector
