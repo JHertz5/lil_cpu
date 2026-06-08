@@ -6,14 +6,11 @@ VUnit test runner for lil_cpu project.
 from pathlib import Path
 from vunit import VUnit
 
-
 # Get the directory where this script is located (project root).
 SRC_DIR = Path(__file__).parent.parent / "src"
 
 # Create VUnit instance with VHDL-2008 standard.
-vu = VUnit.from_argv(
-    vhdl_standard="2008"
-)
+vu = VUnit.from_argv(vhdl_standard="2008")
 vu.add_vhdl_builtins()
 
 # Create the lil_cpu library.
