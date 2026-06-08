@@ -31,11 +31,11 @@ architecture tb of reg_tb is
 
   -- Inter-process communication signals.
   signal stimuli_cmd   : t_stimuli_cmd := CMD_IDLE;
-  signal stimuli_param : t_bus_data    := (others => '0');
+  signal stimuli_data : t_bus_data    := (others => '0');
   signal stimuli_ack   : std_logic     := '0';
 
   signal check_cmd   : t_check_cmd  := CMD_IDLE;
-  signal check_param : t_bus_data   := (others => '0');
+  signal check_data : t_bus_data   := (others => '0');
   signal check_ack   : std_logic    := '0';
 
 begin
@@ -86,7 +86,7 @@ begin
           dut_i_reset <= '0';
 
         when CMD_LOAD_DATA =>
-          dut_i_data     <= stimuli_param;
+          dut_i_data     <= stimuli_data;
           dut_i_input_en <= '1';
           wait until rising_edge(dut_i_clk);
           dut_i_input_en <= '0';
@@ -128,13 +128,19 @@ begin
           null;
 
         when CMD_VERIFY_OUTPUT =>
-          check(dut_o_data = check_param, "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_param));
+          check(
+            dut_o_data = check_data,
+            "o_data mismatch: got " & to_string(dut_o_data) & ", expected " & to_string(check_data)
+          );
           check_ack <= '1';
           wait until rising_edge(dut_i_clk);
           check_ack <= '0';
 
         when CMD_VERIFY_HIGHZ =>
-          check(dut_o_data = (dut_o_data'range => 'Z'), "o_data should be high-Z, got " & to_string(dut_o_data));
+          check(
+            dut_o_data = (dut_o_data'range => 'Z'),
+            "o_data should be high-Z, got " & to_string(dut_o_data)
+          );
           check_ack <= '1';
           wait until rising_edge(dut_i_clk);
           check_ack <= '0';
@@ -162,93 +168,271 @@ begin
       if run("test_reset") then
         info("Running test_reset");
         v_exp_data := x"AA";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        wait_clock_cycle(stimuli_ack, stimuli_cmd);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        wait_clock_cycle(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"00";
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
       end if;
 
       -- Test 2: Data latches on rising edge when input enabled.
       if run("test_input_latching") then
         info("Running test_input_latching");
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"55";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
         v_exp_data := x"AA";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
       end if;
 
       -- Test 3: Output is high-Z when output disabled.
       if run("test_output_disabled_highz") then
         info("Running test_output_disabled_highz");
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"CC";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        set_output_disabled(stimuli_ack, stimuli_cmd);
-        verify_highz(check_ack, check_cmd);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        set_output_disabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_highz(
+          i_ack => check_ack,
+          o_cmd => check_cmd
+        );
       end if;
 
       -- Test 4: Output reflects internal data when enabled.
       if run("test_output_enabled") then
         info("Running test_output_enabled");
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"DD";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
       end if;
 
       -- Test 5: Register holds data when input disabled.
       if run("test_input_disabled_holds_data") then
         info("Running test_input_disabled_holds_data");
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"77";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
         -- Wait multiple cycles without loading new data.
-        wait_clock_cycle(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
-        wait_clock_cycle(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        wait_clock_cycle(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
+        wait_clock_cycle(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
       end if;
 
       -- Test 6: Sequential operations.
       if run("test_sequential_operations") then
         info("Running test_sequential_operations");
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"11";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
-        set_output_disabled(stimuli_ack, stimuli_cmd);
-        verify_highz(check_ack, check_cmd);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
+        set_output_disabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_highz(
+          i_ack => check_ack,
+          o_cmd => check_cmd
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
         v_exp_data := x"22";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
       end if;
 
       -- Test 7: Simultaneous input and output.
       if run("test_simultaneous_input_output") then
         info("Running test_simultaneous_input_output");
-        trigger_reset(stimuli_ack, stimuli_cmd);
+        trigger_reset(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
         v_exp_data := x"FF";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
-        set_output_enabled(stimuli_ack, stimuli_cmd);
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
+        set_output_enabled(
+          i_ack => stimuli_ack,
+          o_cmd => stimuli_cmd
+        );
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
         -- Load new value while output is enabled.
         v_exp_data := x"88";
-        load_register(stimuli_ack, v_exp_data, stimuli_cmd, stimuli_param);
+        load_register(
+          i_ack => stimuli_ack,
+          i_load_data => v_exp_data,
+          o_cmd => stimuli_cmd,
+          o_load_data => stimuli_data
+        );
         -- Output should now reflect new value.
-        verify_output(check_ack, v_exp_data, check_cmd, check_param);
+        verify_output(
+          i_ack => check_ack,
+          i_exp_data => v_exp_data,
+          o_cmd => check_cmd,
+          o_exp_data => check_data
+        );
       end if;
 
     end loop;
