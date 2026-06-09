@@ -100,7 +100,6 @@ begin
 
       -- Test reset clears register to zero.
       if run("test_reset") then
-        info("Running test_reset");
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         wait until rising_edge(dut_i_clk);
@@ -113,7 +112,6 @@ begin
 
       -- Test data latches on rising edge when load is enabled.
       if run("test_load") then
-        info("Running test_load");
         trigger_reset;
         dut_i_output_en <= '1';
         for lv_iteration in natural range 1 to 10 loop
@@ -125,7 +123,6 @@ begin
 
       -- Test output is high-Z when output disabled.
       if run("test_output_disabled_highz") then
-        info("Running test_output_disabled_highz");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
@@ -136,7 +133,6 @@ begin
 
       -- Test output reflects internal data when enabled.
       if run("test_output_enabled") then
-        info("Running test_output_enabled");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
@@ -146,7 +142,6 @@ begin
 
       -- Test register holds data when load disabled.
       if run("test_load_disabled_holds_data") then
-        info("Running test_load_disabled_holds_data");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
@@ -161,7 +156,6 @@ begin
 
       -- Test sequential operations.
       if run("test_sequential_operations") then
-        info("Running test_sequential_operations");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
@@ -178,7 +172,6 @@ begin
 
       -- Test simultaneous input and output.
       if run("test_simultaneous_input_output") then
-        info("Running test_simultaneous_input_output");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);

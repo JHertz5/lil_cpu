@@ -84,7 +84,6 @@ begin
 
       -- Test reset clears register to zero.
       if run("test_reset") then
-        info("Running test_reset");
         wait until rising_edge(dut_i_clk);
         dut_i_output_en <= '1';
         check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
@@ -100,7 +99,6 @@ begin
 
       -- Test addr increments on rising edge when count is enabled.
       if run("test_count_en") then
-        info("Running test_count_en");
         trigger_reset;
         dut_i_output_en <= '1';
         dut_i_count_en  <= '1';
@@ -113,7 +111,6 @@ begin
 
       -- Test output is high-Z when output disabled.
       if run("test_output_disabled_highz") then
-        info("Running test_output_disabled_highz");
         trigger_reset;
         dut_i_output_en <= '0';
         v_exp_addr      := (others => 'Z');
@@ -122,7 +119,6 @@ begin
 
       -- Test register holds data when count is disabled.
       if run("test_count_disabled_holds_count") then
-        info("Running test_count_disabled_holds_count");
         trigger_reset;
         dut_i_count_en  <= '1';
         dut_i_output_en <= '1';
