@@ -168,8 +168,7 @@ begin
         dut_i_output_en <= '1';
         check_slv(c_data_test_name, dut_o_data, v_exp_data);
         dut_i_output_en <= '0';
-        v_exp_data := (others => 'Z');
-        check_slv(c_data_test_name, dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, t_bus_data'(others => 'Z'));
         dut_i_output_en <= '1';
         check_slv(c_data_test_name, dut_o_data, v_exp_data);
         generate_random_slv(v_exp_data);
