@@ -9,7 +9,7 @@ The project was inspired by [Ben Eater's 8-bit computer](https://eater.net/8bit)
 
 SAP-1's design is broken down into modules, as shown below:
 
-![alt text](sap1_architecture.drawio.svg)
+![alt text](doc/sap1_architecture.drawio.svg)
 
 ## Control Signals
 
