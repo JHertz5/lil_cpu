@@ -15,7 +15,7 @@ entity reg is
   port (
     i_clk       : in  std_logic;
     i_reset     : in  std_logic;
-    i_input_en  : in  std_logic;
+    i_load  : in  std_logic;
     i_output_en : in  std_logic;
     i_data      : in  t_bus_data;
     o_data      : out t_bus_data
@@ -35,7 +35,7 @@ begin
       -- Reset the data or latch the incoming data depending on control signals.
       if i_reset then
         data_internal <= (others => '0');
-      elsif i_input_en then
+      elsif i_load then
         data_internal <= i_data;
       end if;
 

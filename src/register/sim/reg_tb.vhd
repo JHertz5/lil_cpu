@@ -23,7 +23,7 @@ architecture tb of reg_tb is
   -- DUT signals.
   signal dut_i_clk       : std_logic := '0';
   signal dut_i_reset     : std_logic;
-  signal dut_i_input_en  : std_logic;
+  signal dut_i_load  : std_logic;
   signal dut_i_output_en : std_logic;
   signal dut_i_data      : t_bus_data;
   signal dut_o_data      : t_bus_data;
@@ -44,7 +44,7 @@ begin
     port map (
       i_clk       => dut_i_clk,
       i_reset     => dut_i_reset,
-      i_input_en  => dut_i_input_en,
+      i_load  => dut_i_load,
       i_output_en => dut_i_output_en,
       i_data      => dut_i_data,
       o_data      => dut_o_data
@@ -75,9 +75,9 @@ begin
     begin
 
       dut_i_data     <= i_load_data;
-      dut_i_input_en <= '1';
+      dut_i_load <= '1';
       wait until rising_edge(dut_i_clk);
-      dut_i_input_en <= '0';
+      dut_i_load <= '0';
       dut_i_data     <= (others => '0');
 
     end procedure;
@@ -86,7 +86,7 @@ begin
 
     -- Initialize inputs
     dut_i_reset     <= '0';
-    dut_i_input_en  <= '0';
+    dut_i_load  <= '0';
     dut_i_output_en <= '0';
     dut_i_data      <= (others => '0');
 
@@ -109,9 +109,9 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 2: Data latches on rising edge when input enabled.
-      if run("test_input_latching") then
-        info("Running test_input_latching");
+      -- Test 2: Data latches on rising edge when load is enabled.
+      if run("test_load") then
+        info("Running test_load");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
@@ -142,9 +142,9 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 5: Register holds data when input disabled.
-      if run("test_input_disabled_holds_data") then
-        info("Running test_input_disabled_holds_data");
+      -- Test 5: Register holds data when load disabled.
+      if run("test_load_disabled_holds_data") then
+        info("Running test_load_disabled_holds_data");
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
