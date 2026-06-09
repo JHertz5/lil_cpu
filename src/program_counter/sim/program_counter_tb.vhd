@@ -121,7 +121,7 @@ begin
         trigger_reset;
         dut_i_count_en  <= '1';
         dut_i_output_en <= '1';
-        v_exp_addr := x"0";
+        v_exp_addr      := x"0";
         check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
         wait until rising_edge(dut_i_clk);
         v_exp_addr      := x"1";
