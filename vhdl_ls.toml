@@ -2,7 +2,7 @@
 preferred_case = "lower"
 
 [libraries]
-lil_cpu.files = [
+lil_cpu_lib.files = [
   'src/**/hdl/*.vhd',
   'src/**/sim/*.vhd'
 ]

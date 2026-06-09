@@ -5,8 +5,8 @@
 library ieee;
   use ieee.std_logic_1164.all;
 
-library lil_cpu;
-  use lil_cpu.lil_cpu_pkg.all;
+library lil_cpu_lib;
+  use lil_cpu_lib.lil_cpu_pkg.all;
 
 entity reg is
   generic (

@@ -14,7 +14,7 @@ vu = VUnit.from_argv(vhdl_standard="2008")
 vu.add_vhdl_builtins()
 
 # Create the lil_cpu library.
-lib = vu.add_library("lil_cpu")
+lib = vu.add_library("lil_cpu_lib")
 
 # Add HDL files.
 lib.add_source_files(SRC_DIR / "*" / "hdl" / "*.vhd")
