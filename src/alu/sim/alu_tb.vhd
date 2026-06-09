@@ -71,16 +71,16 @@ begin
 
     begin
 
+      -- Generate inputs.
         generate_random_slv(v_test_data_a);
         dut_i_data_a <= v_test_data_a;
         generate_random_slv(v_test_data_b);
         dut_i_data_b <= v_test_data_b;
 
-        if i_subtract_en then
-          o_sum := std_logic_vector(unsigned(v_test_data_a) - unsigned(v_test_data_b));
-        else
-          o_sum := std_logic_vector(unsigned(v_test_data_a) + unsigned(v_test_data_b));
-        end if;
+        -- Calculate result.
+        o_sum :=
+          std_logic_vector(unsigned(v_test_data_a) - unsigned(v_test_data_b)) when i_subtract_en else
+          std_logic_vector(unsigned(v_test_data_a) + unsigned(v_test_data_b));
 
     end procedure;
 
