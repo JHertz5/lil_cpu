@@ -8,9 +8,9 @@ library ieee;
 library vunit_lib;
   context vunit_lib.vunit_context;
 
-library lil_cpu;
-  use lil_cpu.common_tb_pkg.all;
-  use lil_cpu.lil_cpu_pkg.all;
+library lil_cpu_lib;
+  use lil_cpu_lib.common_tb_pkg.all;
+  use lil_cpu_lib.lil_cpu_pkg.all;
 
 entity reg_tb is
   generic (
@@ -40,7 +40,7 @@ begin
   -- Instantiate the DUT.
   ----------------------------------------------------------------------------------------------------------------------
 
-  cmp_dut : entity lil_cpu.reg(rtl)
+  cmp_dut : entity lil_cpu_lib.reg(rtl)
     port map (
       i_clk       => dut_i_clk,
       i_reset     => dut_i_reset,
