@@ -40,7 +40,7 @@ architecture rtl of alu is
 
   begin
 
-    for lv_bit in v_result'range loop
+    for lv_bit in v_result'low to v_result'high loop
       v_a_xor_b := i_a(lv_bit) xor i_b(lv_bit);
       v_result(lv_bit) := v_a_xor_b xor v_carry;
       v_carry := (v_a_xor_b and v_carry) or (i_a(lv_bit) and i_b(lv_bit));
