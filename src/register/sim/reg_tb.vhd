@@ -96,7 +96,7 @@ begin
 
       wait until rising_edge(dut_i_clk);
 
-      -- Test 1: Reset clears register to zero.
+      -- Test reset clears register to zero.
       if run("test_reset") then
         info("Running test_reset");
         generate_random_slv(v_exp_data);
@@ -109,7 +109,7 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 2: Data latches on rising edge when load is enabled.
+      -- Test data latches on rising edge when load is enabled.
       if run("test_load") then
         info("Running test_load");
         trigger_reset;
@@ -122,7 +122,7 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 3: Output is high-Z when output disabled.
+      -- Test output is high-Z when output disabled.
       if run("test_output_disabled_highz") then
         info("Running test_output_disabled_highz");
         trigger_reset;
@@ -133,7 +133,7 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 4: Output reflects internal data when enabled.
+      -- Test output reflects internal data when enabled.
       if run("test_output_enabled") then
         info("Running test_output_enabled");
         trigger_reset;
@@ -143,7 +143,7 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 5: Register holds data when load disabled.
+      -- Test register holds data when load disabled.
       if run("test_load_disabled_holds_data") then
         info("Running test_load_disabled_holds_data");
         trigger_reset;
@@ -158,7 +158,7 @@ begin
         end loop;
       end if;
 
-      -- Test 6: Sequential operations.
+      -- Test sequential operations.
       if run("test_sequential_operations") then
         info("Running test_sequential_operations");
         trigger_reset;
@@ -176,7 +176,7 @@ begin
         check_slv(dut_o_data, v_exp_data);
       end if;
 
-      -- Test 7: Simultaneous input and output.
+      -- Test simultaneous input and output.
       if run("test_simultaneous_input_output") then
         info("Running test_simultaneous_input_output");
         trigger_reset;
