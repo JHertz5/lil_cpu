@@ -129,6 +129,18 @@ begin
         check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
       end if;
 
+      -- Test zero input.
+      if run("test_zero_input") then
+        dut_i_data_a <= (others => '0');
+        dut_i_data_b <= (others => '0');
+        dut_i_output_en <= '1';
+        v_exp_sum      := (others => '0');
+        dut_i_subtract_en <= '0';
+        check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
+        dut_i_subtract_en <= '1';
+        check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
+      end if;
+
     end loop;
 
     test_runner_cleanup(runner);
