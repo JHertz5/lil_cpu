@@ -84,7 +84,7 @@ begin
 
   begin
 
-    -- Initialize inputs
+    -- Initialize inputs.
     dut_i_reset     <= '0';
     dut_i_load      <= '0';
     dut_i_output_en <= '0';
@@ -129,7 +129,8 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '0';
-        check_slv(dut_o_data, t_bus_data'(others => 'Z'));
+        v_exp_data := (others => 'Z');
+        check_slv(dut_o_data, v_exp_data);
       end if;
 
       -- Test 4: Output reflects internal data when enabled.
@@ -166,7 +167,8 @@ begin
         dut_i_output_en <= '1';
         check_slv(dut_o_data, v_exp_data);
         dut_i_output_en <= '0';
-        check_slv(dut_o_data, t_bus_data'(others => 'Z'));
+        v_exp_data := (others => 'Z');
+        check_slv(dut_o_data, v_exp_data);
         dut_i_output_en <= '1';
         check_slv(dut_o_data, v_exp_data);
         generate_random_slv(v_exp_data);
