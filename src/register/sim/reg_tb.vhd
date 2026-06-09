@@ -113,13 +113,12 @@ begin
       if run("test_load") then
         info("Running test_load");
         trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        check_slv(dut_o_data, v_exp_data);
+        for lv_iteration in natural range 1 to 10 loop
+          generate_random_slv(v_exp_data);
+          load_register(v_exp_data);
+          check_slv(dut_o_data, v_exp_data);
+        end loop;
       end if;
 
       -- Test output is high-Z when output disabled.
