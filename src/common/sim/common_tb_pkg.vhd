@@ -54,7 +54,7 @@ package body common_tb_pkg is
   ) is
 
     -- Each iteration clears one delta cycle.
-    constant c_num_delta_settling_iterations : natural := 10;
+    constant c_num_delta_settling_iterations : natural := 32;
 
   begin
 
@@ -64,7 +64,7 @@ package body common_tb_pkg is
     end loop;
     check(
       i_actual = i_expected,
-      i_name & " mismatch: got " & to_string(i_actual) & ", expected " & to_string(i_expected)
+      i_name & " mismatch: got 0x" & to_hstring(i_actual) & ", expected 0x" & to_hstring(i_expected)
     );
 
   end procedure;
