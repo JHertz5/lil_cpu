@@ -11,10 +11,10 @@ library lil_cpu_lib;
 entity alu is
   port (
     i_subtract_en : in  std_logic;
-    i_output_en : in  std_logic;
+    i_output_en   : in  std_logic;
     i_data_a      : in  t_bus_data;
     i_data_b      : in  t_bus_data;
-    o_sum      : out t_bus_data
+    o_sum         : out t_bus_data
   );
 end entity;
 
@@ -34,16 +34,16 @@ architecture rtl of alu is
     i_carry : std_logic
   ) return t_bus_data is
 
-    variable v_carry : std_logic := i_carry;
+    variable v_carry   : std_logic := i_carry;
     variable v_a_xor_b : std_logic;
-    variable v_result : t_bus_data;
+    variable v_result  : t_bus_data;
 
   begin
 
     for lv_bit in v_result'low to v_result'high loop
-      v_a_xor_b := i_a(lv_bit) xor i_b(lv_bit);
+      v_a_xor_b        := i_a(lv_bit) xor i_b(lv_bit);
       v_result(lv_bit) := v_a_xor_b xor v_carry;
-      v_carry := (v_a_xor_b and v_carry) or (i_a(lv_bit) and i_b(lv_bit));
+      v_carry          := (v_a_xor_b and v_carry) or (i_a(lv_bit) and i_b(lv_bit));
     end loop;
 
     return v_result;
