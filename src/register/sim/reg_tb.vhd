@@ -130,7 +130,7 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '0';
-        v_exp_data := (others => 'Z');
+        v_exp_data      := (others => 'Z');
         check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
