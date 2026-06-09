@@ -15,13 +15,13 @@ entity program_counter is
     i_reset     : in  std_logic;
     i_count_en  : in  std_logic;
     i_output_en : in  std_logic;
-    o_addr      : out t_addr_data
+    o_addr      : out t_addr
   );
 end entity;
 
 architecture rtl of program_counter is
 
-  signal addr_internal : unsigned(t_addr_data'range) := (others => '0');
+  signal addr_internal : unsigned(t_addr'range) := (others => '0');
 
 begin
 
