@@ -79,8 +79,8 @@ begin
 
         -- Calculate result.
         o_sum :=
-          std_logic_vector(unsigned(v_test_data_a) - unsigned(v_test_data_b)) when i_subtract_en else
-          std_logic_vector(unsigned(v_test_data_a) + unsigned(v_test_data_b));
+          std_logic_vector(signed(v_test_data_a) - signed(v_test_data_b)) when i_subtract_en else
+          std_logic_vector(signed(v_test_data_a) + signed(v_test_data_b));
 
     end procedure;
 
@@ -104,9 +104,9 @@ begin
         dut_i_output_en <= '1';
         dut_i_subtract_en <= '0';
         for lv_iteration in natural range 1 to 10 loop
+          wait until rising_edge(dut_i_clk);
           get_random_expected_data(dut_i_subtract_en, v_exp_sum);
           check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
-          wait until rising_edge(dut_i_clk);
         end loop;
       end if;
 
@@ -115,9 +115,9 @@ begin
         dut_i_output_en <= '1';
         dut_i_subtract_en <= '1';
         for lv_iteration in natural range 1 to 10 loop
+          wait until rising_edge(dut_i_clk);
           get_random_expected_data(dut_i_subtract_en, v_exp_sum);
           check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
-          wait until rising_edge(dut_i_clk);
         end loop;
       end if;
 
