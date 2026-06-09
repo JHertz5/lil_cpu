@@ -39,10 +39,10 @@ The SAP design uses the _falling_ edge of the clock to increment the program cou
 The SAP design connects everything via a single bus. This is great for simplicity, and great for a circuit with discrete logic where we can install tr-state buffers, but high-impedance is not supported by FPGA logic, which would be the target of this project if we were to go to hardware. I will start off by connecting everything to a bus for simplicity, and then move to discrete connections in the next phase.
 
 # Tasks
-For each module, I'd like to do the following tasks.
-[ ] Design - Ideally a diagram and some documentation before I start writing any code.
-[ ] Implementation - The design coded up in VHDL.
-[ ] Verification - A self-checking testbench to validate the operation of the module.
+For each module, I'd like to do the following tasks:
+- [ ] Design - Ideally a diagram and some documentation before I start writing any code.
+- [ ] Implementation - The design coded up in VHDL.
+- [ ] Verification - A self-checking testbench to validate the operation of the module.
 
 # Stretch Goals
 - Run the CPU on real hardware (maybe [FOMU](https://www.crowdsupply.com/sutajio-kosagi/fomu) or [iCEBreaker](https://1bitsquared.com/products/icebreaker).
