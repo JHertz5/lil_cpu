@@ -58,6 +58,8 @@ begin
 
     variable v_exp_data : t_bus_data;
 
+    constant c_data_test_name : string := "o_data";
+
     -- Reset the register.
     procedure trigger_reset is
     begin
@@ -103,10 +105,10 @@ begin
         load_register(v_exp_data);
         wait until rising_edge(dut_i_clk);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         trigger_reset;
         v_exp_data      := x"00";
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
       -- Test data latches on rising edge when load is enabled.
@@ -117,7 +119,7 @@ begin
         for lv_iteration in natural range 1 to 10 loop
           generate_random_slv(v_exp_data);
           load_register(v_exp_data);
-          check_slv(dut_o_data, v_exp_data);
+          check_slv(c_data_test_name, dut_o_data, v_exp_data);
         end loop;
       end if;
 
@@ -129,7 +131,7 @@ begin
         load_register(v_exp_data);
         dut_i_output_en <= '0';
         v_exp_data := (others => 'Z');
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
       -- Test output reflects internal data when enabled.
@@ -139,7 +141,7 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
       -- Test register holds data when load disabled.
@@ -149,11 +151,11 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         -- Wait multiple cycles without loading new data.
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
-          check_slv(dut_o_data, v_exp_data);
+          check_slv(c_data_test_name, dut_o_data, v_exp_data);
         end loop;
       end if;
 
@@ -164,15 +166,15 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         dut_i_output_en <= '0';
         v_exp_data := (others => 'Z');
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
       -- Test simultaneous input and output.
@@ -182,12 +184,12 @@ begin
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         -- Load new value while output is enabled.
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         -- Output should now reflect new value.
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
     end loop;
