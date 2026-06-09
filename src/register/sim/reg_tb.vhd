@@ -23,7 +23,7 @@ architecture tb of reg_tb is
   -- DUT signals.
   signal dut_i_clk       : std_logic := '0';
   signal dut_i_reset     : std_logic;
-  signal dut_i_load  : std_logic;
+  signal dut_i_load      : std_logic;
   signal dut_i_output_en : std_logic;
   signal dut_i_data      : t_bus_data;
   signal dut_o_data      : t_bus_data;
@@ -44,7 +44,7 @@ begin
     port map (
       i_clk       => dut_i_clk,
       i_reset     => dut_i_reset,
-      i_load  => dut_i_load,
+      i_load      => dut_i_load,
       i_output_en => dut_i_output_en,
       i_data      => dut_i_data,
       o_data      => dut_o_data
@@ -74,11 +74,11 @@ begin
     ) is
     begin
 
-      dut_i_data     <= i_load_data;
+      dut_i_data <= i_load_data;
       dut_i_load <= '1';
       wait until rising_edge(dut_i_clk);
       dut_i_load <= '0';
-      dut_i_data     <= (others => '0');
+      dut_i_data <= (others => '0');
 
     end procedure;
 
@@ -86,7 +86,7 @@ begin
 
     -- Initialize inputs
     dut_i_reset     <= '0';
-    dut_i_load  <= '0';
+    dut_i_load      <= '0';
     dut_i_output_en <= '0';
     dut_i_data      <= (others => '0');
 
