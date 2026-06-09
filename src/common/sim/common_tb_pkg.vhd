@@ -20,7 +20,7 @@ package common_tb_pkg is
 
   -- Check the expected result against the actual.
   procedure check_slv (
-    i_name     : in string;
+    i_name     : in  string;
     i_actual   : in  std_logic_vector;
     i_expected : in  std_logic_vector
   );
@@ -48,7 +48,7 @@ package body common_tb_pkg is
   end procedure;
 
   procedure check_slv (
-    i_name     : in string;
+    i_name     : in  string;
     i_actual   : in  std_logic_vector;
     i_expected : in  std_logic_vector
   ) is
@@ -56,15 +56,16 @@ package body common_tb_pkg is
     -- Each iteration clears one delta cycle.
     constant c_num_delta_settling_iterations : natural := 10;
 
-    constant c_msg : string := i_name & " mismatch: got " & to_string(i_actual) & ", expected " & to_string(i_expected);
-
   begin
 
     -- Run a few 0 ns waits to settle the delta delays.
     for lv_iteration in natural range 1 to c_num_delta_settling_iterations loop
       wait for 0 ns;
     end loop;
-    check((i_actual = i_expected), c_msg);
+    check(
+      i_actual = i_expected,
+      i_name & " mismatch: got " & to_string(i_actual) & ", expected " & to_string(i_expected)
+    );
 
   end procedure;
 
