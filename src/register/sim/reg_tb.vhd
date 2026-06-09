@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------------------------------
--- Testbench for reg module.
+-- Testbench for the reg module.
 ------------------------------------------------------------------------------------------------------------------------
 
 library ieee;
@@ -58,6 +58,8 @@ begin
 
     variable v_exp_data : t_bus_data;
 
+    constant c_data_test_name : string := "o_data";
+
     -- Reset the register.
     procedure trigger_reset is
     begin
@@ -84,7 +86,7 @@ begin
 
   begin
 
-    -- Initialize inputs
+    -- Initialize inputs.
     dut_i_reset     <= '0';
     dut_i_load      <= '0';
     dut_i_output_en <= '0';
@@ -96,97 +98,90 @@ begin
 
       wait until rising_edge(dut_i_clk);
 
-      -- Test 1: Reset clears register to zero.
+      -- Test reset clears register to zero.
       if run("test_reset") then
-        info("Running test_reset");
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         wait until rising_edge(dut_i_clk);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         trigger_reset;
         v_exp_data      := x"00";
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
-      -- Test 2: Data latches on rising edge when load is enabled.
+      -- Test data latches on rising edge when load is enabled.
       if run("test_load") then
-        info("Running test_load");
         trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        check_slv(dut_o_data, v_exp_data);
-      end if;
-
-      -- Test 3: Output is high-Z when output disabled.
-      if run("test_output_disabled_highz") then
-        info("Running test_output_disabled_highz");
-        trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        dut_i_output_en <= '0';
-        check_slv(dut_o_data, t_bus_data'(others => 'Z'));
-      end if;
-
-      -- Test 4: Output reflects internal data when enabled.
-      if run("test_output_enabled") then
-        info("Running test_output_enabled");
-        trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
-      end if;
-
-      -- Test 5: Register holds data when load disabled.
-      if run("test_load_disabled_holds_data") then
-        info("Running test_load_disabled_holds_data");
-        trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
-        -- Wait multiple cycles without loading new data.
         for lv_iteration in natural range 1 to 10 loop
-          wait until rising_edge(dut_i_clk);
-          check_slv(dut_o_data, v_exp_data);
+          generate_random_slv(v_exp_data);
+          load_register(v_exp_data);
+          check_slv(c_data_test_name, dut_o_data, v_exp_data);
         end loop;
       end if;
 
-      -- Test 6: Sequential operations.
-      if run("test_sequential_operations") then
-        info("Running test_sequential_operations");
+      -- Test output is high-Z when output disabled.
+      if run("test_output_disabled_highz") then
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
-        dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
         dut_i_output_en <= '0';
-        check_slv(dut_o_data, t_bus_data'(others => 'Z'));
-        dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        check_slv(dut_o_data, v_exp_data);
+        v_exp_data      := (others => 'Z');
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
-      -- Test 7: Simultaneous input and output.
-      if run("test_simultaneous_input_output") then
-        info("Running test_simultaneous_input_output");
+      -- Test output reflects internal data when enabled.
+      if run("test_output_enabled") then
         trigger_reset;
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         dut_i_output_en <= '1';
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
+      end if;
+
+      -- Test register holds data when load disabled.
+      if run("test_load_disabled_holds_data") then
+        trigger_reset;
+        generate_random_slv(v_exp_data);
+        load_register(v_exp_data);
+        dut_i_output_en <= '1';
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
+        -- Wait multiple cycles without loading new data.
+        for lv_iteration in natural range 1 to 10 loop
+          wait until rising_edge(dut_i_clk);
+          check_slv(c_data_test_name, dut_o_data, v_exp_data);
+        end loop;
+      end if;
+
+      -- Test sequential operations.
+      if run("test_sequential_operations") then
+        trigger_reset;
+        generate_random_slv(v_exp_data);
+        load_register(v_exp_data);
+        dut_i_output_en <= '1';
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
+        dut_i_output_en <= '0';
+        check_slv(c_data_test_name, dut_o_data, t_bus_data'(others => 'Z'));
+        dut_i_output_en <= '1';
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
+        generate_random_slv(v_exp_data);
+        load_register(v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
+      end if;
+
+      -- Test simultaneous input and output.
+      if run("test_simultaneous_input_output") then
+        trigger_reset;
+        generate_random_slv(v_exp_data);
+        load_register(v_exp_data);
+        dut_i_output_en <= '1';
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
         -- Load new value while output is enabled.
         generate_random_slv(v_exp_data);
         load_register(v_exp_data);
         -- Output should now reflect new value.
-        check_slv(dut_o_data, v_exp_data);
+        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
     end loop;
