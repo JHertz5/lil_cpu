@@ -40,9 +40,9 @@ begin
   end process;
 
   -- Buffer the output data.
-  o_addr <= buffer_output_to_bus(
+  o_addr <= unsigned(buffer_output_to_bus(
       i_en   => i_output_en,
       i_data => std_logic_vector(addr_internal)
-    );
+    ));
 
 end architecture;
