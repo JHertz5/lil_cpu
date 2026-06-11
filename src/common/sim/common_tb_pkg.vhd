@@ -4,6 +4,7 @@
 
 library ieee;
   use ieee.std_logic_1164.all;
+  use ieee.numeric_std.all;
   use ieee.math_real.all;
 
 library vunit_lib;
@@ -23,6 +24,13 @@ package common_tb_pkg is
     i_name     : in  string;
     i_actual   : in  std_logic_vector;
     i_expected : in  std_logic_vector
+  );
+
+  -- Check the expected result against the actual.
+  procedure check_unsigned (
+    i_name     : in  string;
+    i_actual   : in  unsigned;
+    i_expected : in  unsigned
   );
 
 end package;
@@ -65,6 +73,21 @@ package body common_tb_pkg is
     check(
       i_actual = i_expected,
       i_name & " mismatch: got 0x" & to_hstring(i_actual) & ", expected 0x" & to_hstring(i_expected)
+    );
+
+  end procedure;
+
+  -- Check the expected result against the actual.
+  procedure check_unsigned (
+    i_name     : in  string;
+    i_actual   : in  unsigned;
+    i_expected : in  unsigned
+  ) is begin
+
+    check_slv(
+      i_name     => i_name,
+      i_actual   => std_logic_vector(i_actual),
+      i_expected => std_logic_vector(i_expected)
     );
 
   end procedure;

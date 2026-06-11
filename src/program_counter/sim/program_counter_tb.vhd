@@ -77,6 +77,7 @@ begin
     dut_i_output_en <= '0';
 
     test_runner_setup(runner, runner_cfg);
+    set_stop_level(failure);
 
     while test_suite loop
 
@@ -87,13 +88,13 @@ begin
         wait until rising_edge(dut_i_clk);
         dut_i_output_en <= '1';
         v_exp_addr      := x"0";
-        check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         trigger_reset;
-        check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         dut_i_count_en  <= '1';
         wait until rising_edge(dut_i_clk);
         trigger_reset;
-        check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
       end if;
 
       -- Test addr increments on rising edge when count is enabled.
@@ -103,8 +104,8 @@ begin
         dut_i_count_en  <= '1';
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
-          v_exp_addr := std_logic_vector(to_unsigned(lv_iteration, t_addr'length));
-          check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+          v_exp_addr := to_unsigned(lv_iteration, t_addr'length);
+          check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         end loop;
       end if;
 
@@ -113,7 +114,7 @@ begin
         trigger_reset;
         dut_i_output_en <= '0';
         v_exp_addr      := (others => 'Z');
-        check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
       end if;
 
       -- Test register holds data when count is disabled.
@@ -122,14 +123,14 @@ begin
         dut_i_count_en  <= '1';
         dut_i_output_en <= '1';
         v_exp_addr      := x"0";
-        check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         wait until rising_edge(dut_i_clk);
         v_exp_addr      := x"1";
         dut_i_count_en  <= '0';
         -- Wait multiple cycles with count disabled.
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
-          check_slv(c_addr_test_name, dut_o_addr, v_exp_addr);
+          check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         end loop;
       end if;
 
