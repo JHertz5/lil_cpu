@@ -77,6 +77,7 @@ begin
     dut_i_output_en <= '0';
 
     test_runner_setup(runner, runner_cfg);
+    set_stop_level(failure);
 
     while test_suite loop
 
