@@ -14,22 +14,24 @@ entity ram is
     g_init : t_ram := (others => (others => '0'))
   );
   port (
-    i_clk       : in  std_logic;
-    i_wr_rdn    : in  std_logic;
-    i_addr      : in  t_addr;
-    i_data      : in  t_bus_data;
-    o_data      : out t_bus_data
+    i_clk    : in  std_logic;
+    i_wr_rdn : in  std_logic;
+    i_addr   : in  t_addr;
+    i_data   : in  t_bus_data;
+    o_data   : out t_bus_data
   );
 end entity;
 
 architecture rtl of ram is
 
-  signal ram_internal : t_ram :=  g_init;
+  signal ram_internal : t_ram := g_init;
 
 begin
 
   proc_reg : process(i_clk)
+
     variable v_addr_int : natural range t_ram'range;
+
   begin
     if rising_edge(i_clk) then
 

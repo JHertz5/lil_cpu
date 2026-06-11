@@ -41,8 +41,8 @@ begin
 
   -- Buffer the output data.
   o_addr <= unsigned(buffer_output_to_bus(
-      i_en   => i_output_en,
-      i_data => std_logic_vector(addr_internal)
-    ));
+        i_en   => i_output_en,
+        i_data => std_logic_vector(addr_internal)
+      ));
 
 end architecture;

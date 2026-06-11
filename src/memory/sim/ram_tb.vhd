@@ -22,16 +22,18 @@ end entity;
 architecture tb of ram_tb is
 
   -- DUT signals.
-  signal dut_i_clk       : std_logic := '0';
+  signal dut_i_clk    : std_logic := '0';
   signal dut_i_wr_rdn : std_logic;
-  signal dut_i_addr : t_addr;
-  signal dut_i_data : t_bus_data;
-  signal dut_o_data : t_bus_data;
+  signal dut_i_addr   : t_addr;
+  signal dut_i_data   : t_bus_data;
+  signal dut_o_data   : t_bus_data;
 
   -- Generate a RAM data object full of randomised data.
   function generate_random_ram_contents return t_ram is
+
     variable v_random_data : t_bus_data;
-    variable v_result : t_ram;
+    variable v_result      : t_ram;
+
   begin
 
     -- Generate random data for each RAM address.
@@ -45,7 +47,6 @@ architecture tb of ram_tb is
   end function;
 
   constant c_ram_init : t_ram := generate_random_ram_contents;
-
 
 begin
 
@@ -64,11 +65,11 @@ begin
       g_init => c_ram_init
     )
     port map (
-      i_clk       => dut_i_clk,
+      i_clk    => dut_i_clk,
       i_wr_rdn => dut_i_wr_rdn,
-      i_addr => dut_i_addr,
-      i_data => dut_i_data,
-      o_data => dut_o_data
+      i_addr   => dut_i_addr,
+      i_data   => dut_i_data,
+      o_data   => dut_o_data
     );
 
   ----------------------------------------------------------------------------------------------------------------------
@@ -114,9 +115,9 @@ begin
   begin
 
     -- Initialize inputs.
-    dut_i_wr_rdn     <= '0';
-    dut_i_addr      <= (others => '0');
-    dut_i_data      <= (others => '0');
+    dut_i_wr_rdn <= '0';
+    dut_i_addr   <= (others => '0');
+    dut_i_data   <= (others => '0');
 
     test_runner_setup(runner, runner_cfg);
     set_stop_level(failure);

@@ -77,7 +77,6 @@ package body common_tb_pkg is
 
   end procedure;
 
-
   -- Check the expected result against the actual.
   procedure check_unsigned (
     i_name     : in  string;
@@ -86,8 +85,8 @@ package body common_tb_pkg is
   ) is begin
 
     check_slv(
-      i_name => i_name,
-      i_actual => std_logic_vector(i_actual),
+      i_name     => i_name,
+      i_actual   => std_logic_vector(i_actual),
       i_expected => std_logic_vector(i_expected)
     );
 

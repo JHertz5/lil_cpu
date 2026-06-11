@@ -16,7 +16,7 @@ package lil_cpu_pkg is
   subtype  t_addr is unsigned(c_addr_width - 1 downto 0);
 
   constant c_ram_depth : natural := c_addr_width ** 2;
-  type t_ram is array(c_ram_depth - 1 downto 0) of t_bus_data;
+  type     t_ram is array(c_ram_depth - 1 downto 0) of t_bus_data;
 
   -- Implement a bus transceiver. When not enabled, isolate the output from the input data, putting the output to
   -- high-impedance. When enabled, output the input data.
@@ -56,6 +56,5 @@ package body lil_cpu_pkg is
     return integer(ceil(log2(real(i_arg))));
 
   end function;
-
 
 end package body;
