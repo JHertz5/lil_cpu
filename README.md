@@ -27,10 +27,10 @@ The second letter, in subscript, in each signal name denotes the module that the
 
 The control signals are used to form high-level instructions, as defined in the table below.
 | Instruction | Operation | Opcode (hex) |
-|---|---|
+|---|---|---|
 | LDA | Load RAM data to Register A | 0x0 |
 | ADD | Add RAM data to Register A | 0x1 |
-| Sub | Subtract RAM data from Register A | 0x2 |
+| SUB | Subtract RAM data from Register A | 0x2 |
 | OUT | Load Register A data into the Output Register | 0xE |
 | HLT | Stop Processing | 0xF |
 
