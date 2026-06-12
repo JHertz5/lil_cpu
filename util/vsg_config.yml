@@ -401,7 +401,7 @@ rule:
   port_008:
     spaces_after: 1
     spaces_before: 1
-  procedure_100: # TODO We want the gap between procedure name and bracket this to be 0 but it breaks the rest of the procedure. Request feature.
+  procedure_100:
     number_of_spaces: 1
   process_002:
     number_of_spaces: 0

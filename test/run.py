@@ -24,9 +24,5 @@ lib.add_source_files(SRC_DIR / "*" / "sim" / "*.vhd")
 # Add compile options for nvc.
 lib.add_compile_option("nvc.a_flags", ["--relaxed"])
 
-# Add test configurations (optional: test with different generic values).
-# By default, g_is_instruction_reg is false. Uncomment below to add a configuration with it set to true.
-# tb_file.add_vhdl_compile_option("--generic g_is_instruction_reg=true")
-
 # Run the test suite.
 vu.main()

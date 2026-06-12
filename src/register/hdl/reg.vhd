@@ -9,9 +9,6 @@ library lil_cpu_lib;
   use lil_cpu_lib.lil_cpu_pkg.all;
 
 entity reg is
-  generic (
-    g_is_instruction_reg : boolean := false
-  );
   port (
     i_clk   : in  std_logic;
     i_reset : in  std_logic;
@@ -25,7 +22,6 @@ architecture rtl of reg is
 
 begin
 
-  -- TODO #21 handle the instruction register.
   proc_reg : process(i_clk)
   begin
     if rising_edge(i_clk) then
