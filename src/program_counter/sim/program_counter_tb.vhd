@@ -83,8 +83,8 @@ begin
       -- Test reset clears register to zero.
       if run("test_reset") then
         wait until rising_edge(dut_i_clk);
+        check_unsigned(c_addr_test_name, dut_o_addr, (t_addr'range => 'U'));
         v_exp_addr      := x"0";
-        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         trigger_reset;
         check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         dut_i_count_en  <= '1';
