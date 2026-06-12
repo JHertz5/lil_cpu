@@ -18,10 +18,21 @@ The control signals in the diagram are labelled with two letters. The first lett
 |---|---|
 | E | Enable output to the bus |
 | L | Load from the bus |
-| C | Count (i.e. Increment) (Program Counter only)|
+| C | Count (i.e. Increment) (Program Counter only) |
 | S | Subtract rather than add (ALU only) |
 
 The second letter, in subscript, in each signal name denotes the module that the signal applies to, e.g P for Program Counter. The mapping between letters and modules is hopefully self-evident from the diagram.
+
+## Instruction Set
+
+The control signals are used to form high-level instructions, as defined in the table below.
+| Instruction | Operation | Opcode (hex) |
+|---|---|
+| LDA | Load RAM data to Register A | 0x0 |
+| ADD | Add RAM data to Register A | 0x1 |
+| Sub | Subtract RAM data from Register A | 0x2 |
+| OUT | Load Register A data into the Output Register | 0xE |
+| HLT | Stop Processing | 0xF |
 
 ## Deviations
 This design will not follow the SAP-1 design exactly. The following changes have been made.
