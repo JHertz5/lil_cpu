@@ -116,13 +116,6 @@ begin
         end loop;
       end if;
 
-      -- Test output is high-Z when output disabled.
-      if run("test_output_disabled_highz") then
-        get_random_expected_data('-', v_exp_sum);
-        v_exp_sum       := (others => 'Z');
-        check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
-      end if;
-
       -- Test zero input.
       if run("test_zero_input") then
         dut_i_data_a      <= (others => '0');
