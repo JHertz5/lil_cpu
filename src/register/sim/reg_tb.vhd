@@ -21,11 +21,11 @@ end entity;
 architecture tb of reg_tb is
 
   -- DUT signals.
-  signal dut_i_clk       : std_logic := '0';
-  signal dut_i_reset     : std_logic;
-  signal dut_i_load      : std_logic;
-  signal dut_i_data      : t_bus_data;
-  signal dut_o_data      : t_bus_data;
+  signal dut_i_clk   : std_logic := '0';
+  signal dut_i_reset : std_logic;
+  signal dut_i_load  : std_logic;
+  signal dut_i_data  : t_bus_data;
+  signal dut_o_data  : t_bus_data;
 
 begin
 
@@ -41,11 +41,11 @@ begin
 
   cmp_dut : entity lil_cpu_lib.reg(rtl)
     port map (
-      i_clk       => dut_i_clk,
-      i_reset     => dut_i_reset,
-      i_load      => dut_i_load,
-      i_data      => dut_i_data,
-      o_data      => dut_o_data
+      i_clk   => dut_i_clk,
+      i_reset => dut_i_reset,
+      i_load  => dut_i_load,
+      i_data  => dut_i_data,
+      o_data  => dut_o_data
     );
 
   ----------------------------------------------------------------------------------------------------------------------
@@ -85,9 +85,9 @@ begin
   begin
 
     -- Initialize inputs.
-    dut_i_reset     <= '0';
-    dut_i_load      <= '0';
-    dut_i_data      <= (others => '0');
+    dut_i_reset <= '0';
+    dut_i_load  <= '0';
+    dut_i_data  <= (others => '0');
 
     test_runner_setup(runner, runner_cfg);
     set_stop_level(failure);
@@ -103,7 +103,7 @@ begin
         wait until rising_edge(dut_i_clk);
         check_slv(c_data_test_name, dut_o_data, v_exp_data);
         trigger_reset;
-        v_exp_data      := x"00";
+        v_exp_data := x"00";
         check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 

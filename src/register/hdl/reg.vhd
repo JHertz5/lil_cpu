@@ -13,11 +13,11 @@ entity reg is
     g_is_instruction_reg : boolean := false
   );
   port (
-    i_clk       : in  std_logic;
-    i_reset     : in  std_logic;
-    i_load      : in  std_logic;
-    i_data      : in  t_bus_data;
-    o_data      : out t_bus_data
+    i_clk   : in  std_logic;
+    i_reset : in  std_logic;
+    i_load  : in  std_logic;
+    i_data  : in  t_bus_data;
+    o_data  : out t_bus_data
   );
 end entity;
 
