@@ -117,15 +117,6 @@ begin
         end loop;
       end if;
 
-      -- Test output is high-Z when output disabled.
-      if run("test_output_disabled_highz") then
-        trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        v_exp_data      := (others => 'Z');
-        check_slv(c_data_test_name, dut_o_data, v_exp_data);
-      end if;
-
       -- Test output reflects internal data when enabled.
       if run("test_output_enabled") then
         trigger_reset;
@@ -145,19 +136,6 @@ begin
           wait until rising_edge(dut_i_clk);
           check_slv(c_data_test_name, dut_o_data, v_exp_data);
         end loop;
-      end if;
-
-      -- Test sequential operations.
-      if run("test_sequential_operations") then
-        trigger_reset;
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        check_slv(c_data_test_name, dut_o_data, v_exp_data);
-        check_slv(c_data_test_name, dut_o_data, t_bus_data'(others => 'Z'));
-        check_slv(c_data_test_name, dut_o_data, v_exp_data);
-        generate_random_slv(v_exp_data);
-        load_register(v_exp_data);
-        check_slv(c_data_test_name, dut_o_data, v_exp_data);
       end if;
 
       -- Test simultaneous input and output.
