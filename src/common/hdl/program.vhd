@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------------------------------
--- Program Counter. Keeps track of the instruction address.
+-- Counter module.
 ------------------------------------------------------------------------------------------------------------------------
 
 library ieee;
@@ -9,16 +9,16 @@ library ieee;
 library lil_cpu_lib;
   use lil_cpu_lib.lil_cpu_pkg.all;
 
-entity program_counter is
+entity counter is
   port (
     i_clk      : in  std_logic;
     i_reset    : in  std_logic;
     i_count_en : in  std_logic;
-    o_addr     : out t_addr
+    o_count    : out unsigned
   );
 end entity;
 
-architecture rtl of program_counter is
+architecture rtl of counter is
 
 begin
 
@@ -28,9 +28,9 @@ begin
 
       -- Reset the data or increment the count depending on control signals.
       if i_reset then
-        o_addr <= (others => '0');
+        o_count <= (others => '0');
       elsif i_count_en then
-        o_addr <= o_addr + 1;
+        o_count <= o_count + 1;
       end if;
 
     end if;
