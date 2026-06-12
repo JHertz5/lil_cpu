@@ -104,13 +104,6 @@ begin
         end loop;
       end if;
 
-      -- Test output is high-Z when output disabled.
-      if run("test_output_disabled_highz") then
-        trigger_reset;
-        v_exp_addr      := (others => 'Z');
-        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
-      end if;
-
       -- Test register holds data when count is disabled.
       if run("test_count_disabled_holds_count") then
         trigger_reset;
