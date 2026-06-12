@@ -25,7 +25,7 @@ architecture tb of counter_tb is
   signal dut_i_clk      : std_logic := '0';
   signal dut_i_reset    : std_logic;
   signal dut_i_count_en : std_logic;
-  signal dut_o_count     : t_addr;
+  signal dut_o_count    : t_addr;
 
 begin
 
@@ -84,7 +84,7 @@ begin
       if run("test_reset") then
         wait until rising_edge(dut_i_clk);
         check_unsigned(c_count_test_name, dut_o_count, (dut_o_count'range => 'U'));
-        v_exp_count     := x"0";
+        v_exp_count    := x"0";
         trigger_reset;
         check_unsigned(c_count_test_name, dut_o_count, v_exp_count);
         dut_i_count_en <= '1';
@@ -108,10 +108,10 @@ begin
       if run("test_count_disabled_holds_count") then
         trigger_reset;
         dut_i_count_en <= '1';
-        v_exp_count     := x"0";
+        v_exp_count    := x"0";
         check_unsigned(c_count_test_name, dut_o_count, v_exp_count);
         wait until rising_edge(dut_i_clk);
-        v_exp_count     := x"1";
+        v_exp_count    := x"1";
         dut_i_count_en <= '0';
         -- Wait multiple cycles with count disabled.
         for lv_iteration in natural range 1 to 10 loop
