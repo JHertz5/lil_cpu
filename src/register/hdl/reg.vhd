@@ -11,7 +11,7 @@ library lil_cpu_lib;
 entity reg is
   port (
     i_clk   : in  std_logic;
-    i_reset : in  std_logic;
+    i_reset : in  std_logic := '0';
     i_load  : in  std_logic;
     i_data  : in  t_bus_data;
     o_data  : out t_bus_data
