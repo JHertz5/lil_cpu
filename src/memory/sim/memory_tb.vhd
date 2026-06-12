@@ -22,10 +22,10 @@ end entity;
 architecture tb of memory_tb is
 
   -- DUT signals.
-  signal dut_i_clk    : std_logic := '0';
+  signal dut_i_clk      : std_logic := '0';
   signal dut_i_load_mar : std_logic;
-  signal dut_i_addr   : t_addr;
-  signal dut_o_data   : t_bus_data;
+  signal dut_i_addr     : t_addr;
+  signal dut_o_data     : t_bus_data;
 
   -- Generate a RAM data object full of randomised data.
   function generate_random_ram_contents return t_ram is
@@ -64,10 +64,10 @@ begin
       g_init => c_ram_init
     )
     port map (
-      i_clk    => dut_i_clk,
+      i_clk      => dut_i_clk,
       i_load_mar => dut_i_load_mar,
-      i_addr   => dut_i_addr,
-      o_data   => dut_o_data
+      i_addr     => dut_i_addr,
+      o_data     => dut_o_data
     );
 
   ----------------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ begin
       -- Loop through the RAM, checking each address.
       for lv_address in t_ram'range loop
         dut_i_load_mar <= '1';
-        dut_i_addr <= to_unsigned(lv_address, dut_i_addr'length);
+        dut_i_addr     <= to_unsigned(lv_address, dut_i_addr'length);
         wait until rising_edge(dut_i_clk);
         dut_i_load_mar <= '0';
         wait until rising_edge(dut_i_clk);
@@ -101,7 +101,7 @@ begin
 
     -- Initialize inputs.
     dut_i_load_mar <= '0';
-    dut_i_addr   <= (others => '0');
+    dut_i_addr     <= (others => '0');
 
     test_runner_setup(runner, runner_cfg);
     set_stop_level(failure);
