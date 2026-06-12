@@ -11,7 +11,6 @@ library lil_cpu_lib;
 entity alu is
   port (
     i_subtract_en : in  std_logic;
-    i_output_en   : in  std_logic;
     i_data_a      : in  t_bus_data;
     i_data_b      : in  t_bus_data;
     o_sum         : out t_bus_data
@@ -23,11 +22,7 @@ architecture rtl of alu is
   -- Data B after being potentially inverted.
   signal data_b_processed : t_bus_data;
 
-  signal sum_internal : t_bus_data;
-
-  ----------------------------------------------------------------------------------------------------------------------
   -- Calculate the sum of two values, with a carry in available.
-  ----------------------------------------------------------------------------------------------------------------------
   function add (
     i_a : t_bus_data;
     i_b : t_bus_data;
@@ -55,12 +50,6 @@ begin
   -- XOR to negate data B if subtracting.
   data_b_processed <= i_data_b xor i_subtract_en;
   -- 2's complement negation is invert and add 1, so add 1 to the inverted data B with the carry.
-  sum_internal <= add(i_data_a, data_b_processed, i_subtract_en);
-
-  -- Buffer the output data.
-  o_sum <= buffer_output_to_bus(
-      i_en   => i_output_en,
-      i_data => sum_internal
-    );
+  o_sum <= add(i_data_a, data_b_processed, i_subtract_en);
 
 end architecture;
