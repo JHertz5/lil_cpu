@@ -22,11 +22,10 @@ end entity;
 architecture tb of program_counter_tb is
 
   -- DUT signals.
-  signal dut_i_clk       : std_logic := '0';
-  signal dut_i_reset     : std_logic;
-  signal dut_i_count_en  : std_logic;
-  signal dut_i_output_en : std_logic;
-  signal dut_o_addr      : t_addr;
+  signal dut_i_clk      : std_logic := '0';
+  signal dut_i_reset    : std_logic;
+  signal dut_i_count_en : std_logic;
+  signal dut_o_addr     : t_addr;
 
 begin
 
@@ -42,11 +41,10 @@ begin
 
   cmp_dut : entity lil_cpu_lib.program_counter(rtl)
     port map (
-      i_clk       => dut_i_clk,
-      i_reset     => dut_i_reset,
-      i_count_en  => dut_i_count_en,
-      i_output_en => dut_i_output_en,
-      o_addr      => dut_o_addr
+      i_clk      => dut_i_clk,
+      i_reset    => dut_i_reset,
+      i_count_en => dut_i_count_en,
+      o_addr     => dut_o_addr
     );
 
   ----------------------------------------------------------------------------------------------------------------------
@@ -72,9 +70,8 @@ begin
   begin
 
     -- Initialize inputs.
-    dut_i_reset     <= '0';
-    dut_i_count_en  <= '0';
-    dut_i_output_en <= '0';
+    dut_i_reset    <= '0';
+    dut_i_count_en <= '0';
 
     test_runner_setup(runner, runner_cfg);
     set_stop_level(failure);
@@ -86,12 +83,11 @@ begin
       -- Test reset clears register to zero.
       if run("test_reset") then
         wait until rising_edge(dut_i_clk);
-        dut_i_output_en <= '1';
-        v_exp_addr      := x"0";
-        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
+        check_unsigned(c_addr_test_name, dut_o_addr, (t_addr'range => 'U'));
+        v_exp_addr     := x"0";
         trigger_reset;
         check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
-        dut_i_count_en  <= '1';
+        dut_i_count_en <= '1';
         wait until rising_edge(dut_i_clk);
         trigger_reset;
         check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
@@ -100,8 +96,7 @@ begin
       -- Test addr increments on rising edge when count is enabled.
       if run("test_count_en") then
         trigger_reset;
-        dut_i_output_en <= '1';
-        dut_i_count_en  <= '1';
+        dut_i_count_en <= '1';
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
           v_exp_addr := to_unsigned(lv_iteration, t_addr'length);
@@ -109,24 +104,15 @@ begin
         end loop;
       end if;
 
-      -- Test output is high-Z when output disabled.
-      if run("test_output_disabled_highz") then
-        trigger_reset;
-        dut_i_output_en <= '0';
-        v_exp_addr      := (others => 'Z');
-        check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
-      end if;
-
       -- Test register holds data when count is disabled.
       if run("test_count_disabled_holds_count") then
         trigger_reset;
-        dut_i_count_en  <= '1';
-        dut_i_output_en <= '1';
-        v_exp_addr      := x"0";
+        dut_i_count_en <= '1';
+        v_exp_addr     := x"0";
         check_unsigned(c_addr_test_name, dut_o_addr, v_exp_addr);
         wait until rising_edge(dut_i_clk);
-        v_exp_addr      := x"1";
-        dut_i_count_en  <= '0';
+        v_exp_addr     := x"1";
+        dut_i_count_en <= '0';
         -- Wait multiple cycles with count disabled.
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);

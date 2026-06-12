@@ -24,7 +24,6 @@ architecture tb of alu_tb is
   -- DUT signals. Even thought the module is combinatorial, the clock is used for test sequencing.
   signal dut_i_clk         : std_logic := '0';
   signal dut_i_subtract_en : std_logic;
-  signal dut_i_output_en   : std_logic;
   signal dut_i_data_a      : t_bus_data;
   signal dut_i_data_b      : t_bus_data;
   signal dut_o_sum         : t_bus_data;
@@ -44,7 +43,6 @@ begin
   cmp_dut : entity lil_cpu_lib.alu(rtl)
     port map (
       i_subtract_en => dut_i_subtract_en,
-      i_output_en   => dut_i_output_en,
       i_data_a      => dut_i_data_a,
       i_data_b      => dut_i_data_b,
       o_sum         => dut_o_sum
@@ -88,7 +86,6 @@ begin
 
     -- Initialize inputs.
     dut_i_subtract_en <= '0';
-    dut_i_output_en   <= '0';
     dut_i_data_a      <= (others => '0');
     dut_i_data_b      <= (others => '0');
 
@@ -101,7 +98,6 @@ begin
 
       -- Test sum is correct when adding.
       if run("test_add") then
-        dut_i_output_en   <= '1';
         dut_i_subtract_en <= '0';
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
@@ -112,7 +108,6 @@ begin
 
       -- Test sum is correct when subtracting.
       if run("test_sub") then
-        dut_i_output_en   <= '1';
         dut_i_subtract_en <= '1';
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
@@ -121,19 +116,10 @@ begin
         end loop;
       end if;
 
-      -- Test output is high-Z when output disabled.
-      if run("test_output_disabled_highz") then
-        get_random_expected_data('-', v_exp_sum);
-        dut_i_output_en <= '0';
-        v_exp_sum       := (others => 'Z');
-        check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
-      end if;
-
       -- Test zero input.
       if run("test_zero_input") then
         dut_i_data_a      <= (others => '0');
         dut_i_data_b      <= (others => '0');
-        dut_i_output_en   <= '1';
         v_exp_sum         := (others => '0');
         dut_i_subtract_en <= '0';
         check_slv(c_sum_test_name, dut_o_sum, v_exp_sum);
