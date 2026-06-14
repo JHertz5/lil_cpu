@@ -31,14 +31,19 @@ The control signals are used to form high-level instructions, as defined in the 
 | LDA | Load RAM data to Register A | 0x0 |
 | ADD | Add RAM data to Register A | 0x1 |
 | SUB | Subtract RAM data from Register A | 0x2 |
-| OUT | Load Register A data into the Output Register | 0xE |
+| LOR | Load Register A data into the Output Register | 0xE |
 | HLT | Stop Processing | 0xF |
+
+Note that `LOR` is usually called `OUT`. I've had to give it a different name as `OUT` is a reserved word in VHDL.
 
 ## Deviations
 This design will not follow the SAP-1 design exactly. The following changes have been made.
 
-### Memory
-The SAP design uses only a 16-address RAM. We have an 8-bit address, so we'll be using 2^8 addresses.
+### Microinstruction Optimisation
+The original microinstructions separate the program counter increment and the loading of the opcode into the instruction register into two separate steps. These are independent operations and we'll combine them into one step for efficiency.
+
+### Ring Counter
+Rather than a one-hot ring counter, we're using a regular binary counter for simplicity.
 
 ### Control Signal Polarity
 The SAP design uses some active-low control signals, likely due to the discrete components used in the design. To simplify things, we wil only use active-high control signals.
