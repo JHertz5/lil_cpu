@@ -100,17 +100,17 @@ begin
           -- Load Memory to Register A.
           when LDA =>
             o_control_word <= (
-              EN_MEM    => '1',
+              EN_MEM  => '1',
               LOAD_AR => '1',
-              others   => '0'
+              others  => '0'
             );
 
           -- Load Memory to Register B.
           when ADD | SUB =>
             o_control_word <= (
-              EN_MEM    => '1',
+              EN_MEM  => '1',
               LOAD_BR => '1',
-              others   => '0'
+              others  => '0'
             );
 
           when others =>
@@ -122,20 +122,20 @@ begin
         case v_opcode is
 
           -- Load ALU to Register A.
-          when ADD  =>
+          when ADD =>
             o_control_word <= (
-              EN_ALU    => '1',
+              EN_ALU  => '1',
               LOAD_AR => '1',
-              others   => '0'
+              others  => '0'
             );
 
           -- Load ALU to Register A, with subtraction enabled.
-          when SUB  =>
+          when SUB =>
             o_control_word <= (
-              EN_ALU    => '1',
+              EN_ALU  => '1',
               LOAD_AR => '1',
               SUB_ALU => '1',
-              others   => '0'
+              others  => '0'
             );
 
           when others =>
