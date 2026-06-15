@@ -71,77 +71,53 @@ begin
         );
 
       when 2 =>
-        case v_opcode is
-
+        with v_opcode select o_control_word <=
           -- Load Operand to Memory.
-          when LDA | ADD | SUB =>
-            o_control_word <= (
-              EN_IR    => '1',
-              LOAD_MEM => '1',
-              others   => '0'
-            );
-
+          (
+            EN_IR    => '1',
+            LOAD_MEM => '1',
+            others   => '0'
+          ) when LDA | ADD | SUB,
           -- Load Register A to Output Register.
-          when LOR =>
-            o_control_word <= (
-              EN_AR   => '1',
-              LOAD_OR => '1',
-              others  => '0'
-            );
-
-          when others =>
-            o_control_word <= (others => '0');
-
-        end case;
+          (
+            EN_AR   => '1',
+            LOAD_OR => '1',
+            others  => '0'
+          ) when LOR,
+          (others => '0') when others;
 
       when 3 =>
-        case v_opcode is
-
+        with v_opcode select o_control_word <=
           -- Load Memory to Register A.
-          when LDA =>
-            o_control_word <= (
-              EN_MEM  => '1',
-              LOAD_AR => '1',
-              others  => '0'
-            );
-
+          (
+            EN_MEM  => '1',
+            LOAD_AR => '1',
+            others  => '0'
+          ) when LDA,
           -- Load Memory to Register B.
-          when ADD | SUB =>
-            o_control_word <= (
-              EN_MEM  => '1',
-              LOAD_BR => '1',
-              others  => '0'
-            );
-
-          when others =>
-            o_control_word <= (others => '0');
-
-        end case;
+          (
+            EN_MEM  => '1',
+            LOAD_BR => '1',
+            others  => '0'
+          ) when ADD | SUB,
+          (others => '0') when others;
 
       when 4 =>
-        case v_opcode is
-
+        with v_opcode select o_control_word <=
           -- Load ALU to Register A.
-          when ADD =>
-            o_control_word <= (
-              EN_ALU  => '1',
-              LOAD_AR => '1',
-              others  => '0'
-            );
-
+          (
+            EN_ALU  => '1',
+            LOAD_AR => '1',
+            others  => '0'
+          ) when ADD,
           -- Load ALU to Register A, with subtraction enabled.
-          when SUB =>
-            o_control_word <= (
-              EN_ALU  => '1',
-              LOAD_AR => '1',
-              SUB_ALU => '1',
-              others  => '0'
-            );
-
-          when others =>
-            o_control_word <= (others => '0');
-
-        end case;
+          (
+            EN_ALU  => '1',
+            LOAD_AR => '1',
+            SUB_ALU => '1',
+            others  => '0'
+          ) when SUB,
+          (others => '0') when others;
 
     end case;
 
