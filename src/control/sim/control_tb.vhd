@@ -187,7 +187,6 @@ begin
 
       -- Test the LDA instruction.
       if run("test_lda") then
-        -- Load a LDA instruction.
         v_instruction := x"01";
         v_exp_operand := extract_operand(v_instruction);
 
@@ -205,7 +204,6 @@ begin
 
       -- Test the ADD instruction.
       if run("test_add") then
-        -- Load a LDA instruction.
         v_instruction := x"11";
         v_exp_operand := extract_operand(v_instruction);
 
@@ -223,7 +221,6 @@ begin
 
       -- Test the SUB instruction.
       if run("test_sub") then
-        -- Load a LDA instruction.
         v_instruction := x"21";
         v_exp_operand := extract_operand(v_instruction);
 
@@ -241,7 +238,6 @@ begin
 
       -- Test the LOR instruction.
       if run("test_lor") then
-        -- Load a LDA instruction.
         v_instruction := x"E1";
         v_exp_operand := extract_operand(v_instruction);
 
