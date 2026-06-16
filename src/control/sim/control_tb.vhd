@@ -95,6 +95,11 @@ begin
     ) is
     begin
 
+      -- Run a few 0 ns waits to settle the delta delays.
+      for lv_iteration in natural range 1 to c_num_delta_settling_iterations loop
+        wait for 0 ns;
+      end loop;
+
       for lv_control_signal in t_control_signal loop
         check_std_logic(
           i_name     => c_control_word_test_name & "(" & to_string(lv_control_signal) &  ")",
