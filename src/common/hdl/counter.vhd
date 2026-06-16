@@ -10,11 +10,14 @@ library lil_cpu_lib;
   use lil_cpu_lib.lil_cpu_pkg.all;
 
 entity counter is
+  generic (
+    g_count_length : natural
+  );
   port (
     i_clk      : in  std_logic;
     i_reset    : in  std_logic;
     i_count_en : in  std_logic;
-    o_count    : out unsigned
+    o_count    : out unsigned(g_count_length - 1 downto 0) := (others => '0')
   );
 end entity;
 

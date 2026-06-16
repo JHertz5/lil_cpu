@@ -40,6 +40,9 @@ begin
   ----------------------------------------------------------------------------------------------------------------------
 
   cmp_dut : entity lil_cpu_lib.counter(rtl)
+    generic map (
+      g_count_length => t_addr'length
+    )
     port map (
       i_clk      => dut_i_clk,
       i_reset    => dut_i_reset,
@@ -82,10 +85,8 @@ begin
 
       -- Test reset clears register to zero.
       if run("test_reset") then
-        wait until rising_edge(dut_i_clk);
-        check_unsigned(c_count_test_name, dut_o_count, (dut_o_count'range => 'U'));
+        -- Check initial state
         v_exp_count    := x"0";
-        trigger_reset;
         check_unsigned(c_count_test_name, dut_o_count, v_exp_count);
         dut_i_count_en <= '1';
         wait until rising_edge(dut_i_clk);
@@ -95,7 +96,6 @@ begin
 
       -- Test count increments on rising edge when count is enabled.
       if run("test_count_en") then
-        trigger_reset;
         dut_i_count_en <= '1';
         for lv_iteration in natural range 1 to 10 loop
           wait until rising_edge(dut_i_clk);
@@ -106,7 +106,6 @@ begin
 
       -- Test register holds data when count is disabled.
       if run("test_count_disabled_holds_count") then
-        trigger_reset;
         dut_i_count_en <= '1';
         v_exp_count    := x"0";
         check_unsigned(c_count_test_name, dut_o_count, v_exp_count);

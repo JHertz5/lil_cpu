@@ -51,24 +51,21 @@ begin
 
     v_opcode := slv_to_opcode(i_opcode);
 
+    -- By default, all control signals are inactive.
+    o_control_word <= (others => '0');
+
     case to_integer(i_state_count) is
 
       -- Load Program Count to Memory.
       when 0 =>
-        o_control_word <= (
-          EN_PC    => '1',
-          LOAD_MEM => '1',
-          others   => '0'
-        );
+        o_control_word(EN_PC)    <= '1';
+        o_control_word(LOAD_MEM) <= '1';
 
       -- Load Instruction to Control. Increment the Program Count.
       when 1 =>
-        o_control_word <= (
-          EN_MEM   => '1',
-          LOAD_IR  => '1',
-          COUNT_PC => '1',
-          others   => '0'
-        );
+        o_control_word(EN_MEM)   <= '1';
+        o_control_word(LOAD_IR)  <= '1';
+        o_control_word(COUNT_PC) <= '1';
 
       when 2 =>
         with v_opcode select o_control_word <=

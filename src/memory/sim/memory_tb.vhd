@@ -76,8 +76,6 @@ begin
 
   proc_test_sequencer : process
 
-    variable v_exp_ram : t_ram;
-
     constant c_data_test_name : string := "o_data";
 
     procedure check_ram_contents (
