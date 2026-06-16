@@ -61,9 +61,9 @@ begin
 
   -- Instantiate the state counter.
   cmp_state_counter : entity lil_cpu_lib.counter(rtl)
-      generic map (
-        g_count_length => state_count'length
-      )
+    generic map (
+      g_count_length => state_count'length
+    )
     port map (
       i_clk      => i_clk,
       i_reset    => reset_count,
