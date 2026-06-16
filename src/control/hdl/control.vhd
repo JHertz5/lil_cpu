@@ -13,7 +13,7 @@ entity control is
   port (
     i_clk                  : in  std_logic;
     i_load_instruction_reg : in  std_logic;
-    i_instruction          : out t_bus_data;
+    i_instruction          : in  t_bus_data;
     o_operand              : out t_bus_data;
     o_control_word         : out t_control_word
   );
