@@ -12,7 +12,7 @@ library lil_cpu_lib;
 entity counter is
   generic (
     g_count_length : natural
-  )
+  );
   port (
     i_clk      : in  std_logic;
     i_reset    : in  std_logic;
