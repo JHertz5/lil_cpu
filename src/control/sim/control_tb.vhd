@@ -55,9 +55,9 @@ begin
 
   proc_test_sequencer : process
 
-    variable v_instruction      : t_bus_data;
-    variable v_exp_operand      : t_bus_data;
-    variable v_exp_control_word : t_control_word;
+    variable v_instruction : t_bus_data;
+    variable v_exp_operand : t_bus_data;
+    -- variable v_exp_control_word : t_control_word;
 
     constant c_operand_test_name      : string := "o_operand";
     constant c_control_word_test_name : string := "o_control_word";
@@ -110,32 +110,39 @@ begin
 
     end procedure;
 
-    procedure check_fetch_cycle is
+    type t_control_word_array is array(natural range <>) of t_control_word;
+
+    procedure check_microinstruction_sequence (
+      constant i_expected_sequence : t_control_word_array;
+      constant i_instruction : t_bus_data
+    ) is
+
+      constant c_fetch_cycle : t_control_word_array(1 to 2) := (
+        (EN_PC => '1', LOAD_MEM => '1', others => '0'),
+        (EN_MEM => '1', LOAD_IR => '1', COUNT_PC => '1', others => '0')
+      );
+
+      constant c_expected_sequence : t_control_word_array(1 to c_num_microinstruction_states) :=
+        c_fetch_cycle & i_expected_sequence;
+
+      variable v_exp_control_word : t_control_word;
+
     begin
 
-      -- Check that the Program Counter is loaded into Memory.
-      v_exp_control_word := (
-        EN_PC => '1',
-        LOAD_MEM => '1',
-        others => '0'
-      );
-      check_control_word(v_exp_control_word);
-      wait until rising_edge(dut_i_clk);
+      dut_i_instruction <= i_instruction;
 
-      dut_i_instruction          <= v_instruction;
-      dut_i_load_instruction_reg <= '1';
-
-      -- Check that Memory data is loaded into the Instruction Register.
-      v_exp_control_word := (
-        EN_MEM => '1',
-        LOAD_IR => '1',
-        COUNT_PC => '1',
-        others => '0'
-      );
-      check_control_word(v_exp_control_word);
-      wait until rising_edge(dut_i_clk);
+      for lv_stage in c_expected_sequence'range loop
+        v_exp_control_word := c_expected_sequence(lv_stage);
+        -- Assert the load IR input if that control signal is asserted.
+        dut_i_load_instruction_reg <= v_exp_control_word(LOAD_IR) ?= '1';
+        -- Check the control word.
+        check_control_word(c_expected_sequence(lv_stage));
+        wait until rising_edge(dut_i_clk);
+      end loop;
 
     end procedure;
+
+    variable v_expected_sequence : t_control_word_array(1 to 3);
 
   begin
 
@@ -184,29 +191,15 @@ begin
         v_instruction := x"01";
         v_exp_operand := extract_operand(v_instruction);
 
-        check_fetch_cycle;
-
-        dut_i_load_instruction_reg <= '0';
-
-        v_exp_control_word := (
-          EN_IR => '1',
-          LOAD_MEM => '1',
-          others => '0'
+        v_expected_sequence := (
+            (EN_IR => '1', LOAD_MEM => '1', others => '0'),
+            (EN_MEM => '1', LOAD_AR => '1', others => '0'),
+            (others => '0')
+          );
+        check_microinstruction_sequence(
+          i_expected_sequence => v_expected_sequence,
+          i_instruction => v_instruction
         );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        v_exp_control_word := (
-          EN_MEM => '1',
-          LOAD_AR => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        v_exp_control_word := (others => '0');
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
 
       end if;
 
@@ -216,33 +209,15 @@ begin
         v_instruction := x"11";
         v_exp_operand := extract_operand(v_instruction);
 
-        check_fetch_cycle;
-
-        dut_i_load_instruction_reg <= '0';
-
-        v_exp_control_word := (
-          EN_IR => '1',
-          LOAD_MEM => '1',
-          others => '0'
+        v_expected_sequence := (
+            (EN_IR => '1', LOAD_MEM => '1', others => '0'),
+            (EN_MEM => '1', LOAD_BR => '1', others => '0'),
+            (EN_ALU => '1', LOAD_AR => '1', others => '0')
+          );
+        check_microinstruction_sequence(
+          i_expected_sequence => v_expected_sequence,
+          i_instruction => v_instruction
         );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        v_exp_control_word := (
-          EN_MEM => '1',
-          LOAD_BR => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        v_exp_control_word := (
-          EN_ALU => '1',
-          LOAD_AR => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
 
       end if;
 
@@ -252,34 +227,15 @@ begin
         v_instruction := x"21";
         v_exp_operand := extract_operand(v_instruction);
 
-        check_fetch_cycle;
-
-        dut_i_load_instruction_reg <= '0';
-
-        v_exp_control_word := (
-          EN_IR => '1',
-          LOAD_MEM => '1',
-          others => '0'
+        v_expected_sequence := (
+            (EN_IR => '1', LOAD_MEM => '1', others => '0'),
+            (EN_MEM => '1', LOAD_BR => '1', others => '0'),
+            (EN_ALU => '1', LOAD_AR => '1', SUB_ALU => '1', others => '0')
+          );
+        check_microinstruction_sequence(
+          i_expected_sequence => v_expected_sequence,
+          i_instruction => v_instruction
         );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        v_exp_control_word := (
-          EN_MEM => '1',
-          LOAD_BR => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        v_exp_control_word := (
-          EN_ALU => '1',
-          LOAD_AR => '1',
-          SUB_ALU => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
 
       end if;
 
@@ -289,27 +245,19 @@ begin
         v_instruction := x"E1";
         v_exp_operand := extract_operand(v_instruction);
 
-        check_fetch_cycle;
-
-        dut_i_load_instruction_reg <= '0';
-
-        v_exp_control_word := (
-          EN_AR => '1',
-          LOAD_OR => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        for lv_iteration in natural range 1 to 2 loop
-          v_exp_control_word := (others => '0');
-          check_control_word(v_exp_control_word);
-          wait until rising_edge(dut_i_clk);
-        end loop;
+        v_expected_sequence := (
+            (EN_AR => '1', LOAD_OR => '1', others => '0'),
+            (others => '0'),
+            (others => '0')
+          );
+        check_microinstruction_sequence(
+                    i_expected_sequence => v_expected_sequence,
+          i_instruction => v_instruction
+);
 
       end if;
 
-      -- TODO add HLT #59
+    -- TODO add HLT #59
 
     end loop;
 
