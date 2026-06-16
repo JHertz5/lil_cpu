@@ -114,7 +114,7 @@ begin
 
     procedure check_microinstruction_sequence (
       constant i_expected_sequence : t_control_word_array;
-      constant i_instruction : t_bus_data
+      constant i_instruction       : t_bus_data
     ) is
 
       constant c_fetch_cycle : t_control_word_array(1 to 2) := (
@@ -192,13 +192,13 @@ begin
         v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
-            (EN_IR => '1', LOAD_MEM => '1', others => '0'),
-            (EN_MEM => '1', LOAD_AR => '1', others => '0'),
-            (others => '0')
-          );
+          (EN_IR => '1', LOAD_MEM => '1', others => '0'),
+          (EN_MEM => '1', LOAD_AR => '1', others => '0'),
+          (others => '0')
+        );
         check_microinstruction_sequence(
           i_expected_sequence => v_expected_sequence,
-          i_instruction => v_instruction
+          i_instruction       => v_instruction
         );
 
       end if;
@@ -210,13 +210,13 @@ begin
         v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
-            (EN_IR => '1', LOAD_MEM => '1', others => '0'),
-            (EN_MEM => '1', LOAD_BR => '1', others => '0'),
-            (EN_ALU => '1', LOAD_AR => '1', others => '0')
-          );
+          (EN_IR => '1', LOAD_MEM => '1', others => '0'),
+          (EN_MEM => '1', LOAD_BR => '1', others => '0'),
+          (EN_ALU => '1', LOAD_AR => '1', others => '0')
+        );
         check_microinstruction_sequence(
           i_expected_sequence => v_expected_sequence,
-          i_instruction => v_instruction
+          i_instruction       => v_instruction
         );
 
       end if;
@@ -228,13 +228,13 @@ begin
         v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
-            (EN_IR => '1', LOAD_MEM => '1', others => '0'),
-            (EN_MEM => '1', LOAD_BR => '1', others => '0'),
-            (EN_ALU => '1', LOAD_AR => '1', SUB_ALU => '1', others => '0')
-          );
+          (EN_IR => '1', LOAD_MEM => '1', others => '0'),
+          (EN_MEM => '1', LOAD_BR => '1', others => '0'),
+          (EN_ALU => '1', LOAD_AR => '1', SUB_ALU => '1', others => '0')
+        );
         check_microinstruction_sequence(
           i_expected_sequence => v_expected_sequence,
-          i_instruction => v_instruction
+          i_instruction       => v_instruction
         );
 
       end if;
@@ -246,14 +246,14 @@ begin
         v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
-            (EN_AR => '1', LOAD_OR => '1', others => '0'),
-            (others => '0'),
-            (others => '0')
-          );
+          (EN_AR => '1', LOAD_OR => '1', others => '0'),
+          (others => '0'),
+          (others => '0')
+        );
         check_microinstruction_sequence(
-                    i_expected_sequence => v_expected_sequence,
-          i_instruction => v_instruction
-);
+          i_expected_sequence => v_expected_sequence,
+          i_instruction       => v_instruction
+        );
 
       end if;
 
