@@ -110,6 +110,33 @@ begin
 
     end procedure;
 
+    procedure check_fetch_cycle is
+    begin
+
+      -- Check that the Program Counter is loaded into Memory.
+      v_exp_control_word := (
+        EN_PC => '1',
+        LOAD_MEM => '1',
+        others => '0'
+      );
+      check_control_word(v_exp_control_word);
+      wait until rising_edge(dut_i_clk);
+
+      dut_i_instruction          <= v_instruction;
+      dut_i_load_instruction_reg <= '1';
+
+      -- Check that Memory data is loaded into the Instruction Register.
+      v_exp_control_word := (
+        EN_MEM => '1',
+        LOAD_IR => '1',
+        COUNT_PC => '1',
+        others => '0'
+      );
+      check_control_word(v_exp_control_word);
+      wait until rising_edge(dut_i_clk);
+
+    end procedure;
+
   begin
 
     -- Initialize inputs.
@@ -151,33 +178,13 @@ begin
         end loop;
       end if;
 
-      -- Test that control word is generated for different instructions.
+      -- Test the LDA instruction.
       if run("test_lda") then
-        -- Load a LDA instruction (opcode x"0").
+        -- Load a LDA instruction.
         v_instruction := x"01";
         v_exp_operand := extract_operand(v_instruction);
 
-        -- Check that the Program Counter is loaded into Memory.
-        v_exp_control_word := (
-          EN_PC => '1',
-          LOAD_MEM => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
-
-        dut_i_instruction          <= v_instruction;
-        dut_i_load_instruction_reg <= '1';
-
-        -- Check that Memory data is loaded into the Instruction Register.
-        v_exp_control_word := (
-          EN_MEM => '1',
-          LOAD_IR => '1',
-          COUNT_PC => '1',
-          others => '0'
-        );
-        check_control_word(v_exp_control_word);
-        wait until rising_edge(dut_i_clk);
+        check_fetch_cycle;
 
         dut_i_load_instruction_reg <= '0';
 
@@ -196,6 +203,11 @@ begin
           LOAD_AR => '1',
           others => '0'
         );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+        -- Check that nothing occurs in this stage.
+        v_exp_control_word := (others => '0');
         check_control_word(v_exp_control_word);
         wait until rising_edge(dut_i_clk);
 
