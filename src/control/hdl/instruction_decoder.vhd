@@ -51,46 +51,37 @@ begin
 
     v_opcode := slv_to_opcode(i_opcode);
 
+    -- By default, all control signals are inactive.
+    o_control_word <= (others => '0');
+
     case to_integer(i_state_count) is
 
       -- Load Program Count to Memory.
       when 0 =>
-        o_control_word <= (
-          EN_PC    => '1',
-          LOAD_MEM => '1',
-          others   => '0'
-        );
+        o_control_word(EN_PC)    <= '1';
+        o_control_word(LOAD_MEM) <= '1';
 
       -- Load Instruction to Control. Increment the Program Count.
       when 1 =>
-        o_control_word <= (
-          EN_MEM   => '1',
-          LOAD_IR  => '1',
-          COUNT_PC => '1',
-          others   => '0'
-        );
+        o_control_word(EN_MEM)   <= '1';
+        o_control_word(LOAD_IR)  <= '1';
+        o_control_word(COUNT_PC) <= '1';
 
       when 2 =>
         case v_opcode is
 
           -- Load Operand to Memory.
           when LDA | ADD | SUB =>
-            o_control_word <= (
-              EN_IR    => '1',
-              LOAD_MEM => '1',
-              others   => '0'
-            );
+            o_control_word(EN_IR)    <= '1';
+            o_control_word(LOAD_MEM) <= '1';
 
           -- Load Register A to Output Register.
           when LOR =>
-            o_control_word <= (
-              EN_AR   => '1',
-              LOAD_OR => '1',
-              others  => '0'
-            );
+            o_control_word(EN_AR)   <= '1';
+            o_control_word(LOAD_OR) <= '1';
 
           when others =>
-            o_control_word <= (others => '0');
+            null;
 
         end case;
 
@@ -99,22 +90,16 @@ begin
 
           -- Load Memory to Register A.
           when LDA =>
-            o_control_word <= (
-              EN_MEM  => '1',
-              LOAD_AR => '1',
-              others  => '0'
-            );
+            o_control_word(EN_MEM)  <= '1';
+            o_control_word(LOAD_AR) <= '1';
 
           -- Load Memory to Register B.
           when ADD | SUB =>
-            o_control_word <= (
-              EN_MEM  => '1',
-              LOAD_BR => '1',
-              others  => '0'
-            );
+            o_control_word(EN_MEM)  <= '1';
+            o_control_word(LOAD_BR) <= '1';
 
           when others =>
-            o_control_word <= (others => '0');
+            null;
 
         end case;
 
@@ -123,23 +108,17 @@ begin
 
           -- Load ALU to Register A.
           when ADD =>
-            o_control_word <= (
-              EN_ALU  => '1',
-              LOAD_AR => '1',
-              others  => '0'
-            );
+            o_control_word(EN_ALU)  <= '1';
+            o_control_word(LOAD_AR) <= '1';
 
           -- Load ALU to Register A, with subtraction enabled.
           when SUB =>
-            o_control_word <= (
-              EN_ALU  => '1',
-              LOAD_AR => '1',
-              SUB_ALU => '1',
-              others  => '0'
-            );
+            o_control_word(EN_ALU)  <= '1';
+            o_control_word(LOAD_AR) <= '1';
+            o_control_word(SUB_ALU) <= '1';
 
           when others =>
-            o_control_word <= (others => '0');
+            null;
 
         end case;
 
