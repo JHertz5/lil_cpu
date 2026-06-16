@@ -28,8 +28,8 @@ package lil_cpu_pkg is
   constant c_addr_width : natural := 4;
   subtype  t_addr is unsigned(c_addr_width - 1 downto 0);
 
-  constant c_num_microinstruction_states : natural := 5;
-  subtype  t_state is unsigned(clog2(c_num_microinstruction_states) - 1 downto 0);
+  constant c_state_width : natural := 3;
+  subtype  t_state is unsigned(c_state_width - 1 downto 0);
 
   constant c_opcode_width : natural := 4;
   subtype  t_opcode_slv  is std_logic_vector(c_opcode_width - 1 downto 0);

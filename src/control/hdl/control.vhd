@@ -32,7 +32,14 @@ architecture rtl of control is
   signal reset_count : std_logic;
   signal state_count : t_state;
 
+  constant c_num_microinstruction_states : natural := 5;
+
 begin
+
+  -- Guarantee the length of the state type. Can't use clog2 in the top-level package as it would be before clog2 is
+  -- defined.
+  assert t_state'length = clog2(c_num_microinstruction_states)
+    severity failure;
 
   -- Instantiate the instruction register.
   cmp_instruction_register : entity lil_cpu_lib.reg(rtl)
@@ -54,6 +61,9 @@ begin
 
   -- Instantiate the state counter.
   cmp_state_counter : entity lil_cpu_lib.counter(rtl)
+      generic map (
+        g_count_length => state_count'length
+      )
     port map (
       i_clk      => i_clk,
       i_reset    => reset_count,

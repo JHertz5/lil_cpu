@@ -40,6 +40,9 @@ begin
   ----------------------------------------------------------------------------------------------------------------------
 
   cmp_dut : entity lil_cpu_lib.counter(rtl)
+    generic map (
+      g_count_length => t_addr'length
+    )
     port map (
       i_clk      => dut_i_clk,
       i_reset    => dut_i_reset,
