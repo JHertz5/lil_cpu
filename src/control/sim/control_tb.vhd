@@ -188,7 +188,6 @@ begin
 
         dut_i_load_instruction_reg <= '0';
 
-        -- Check that operand from the Instruction Register is loaded into Memory.
         v_exp_control_word := (
           EN_IR => '1',
           LOAD_MEM => '1',
@@ -197,7 +196,6 @@ begin
         check_control_word(v_exp_control_word);
         wait until rising_edge(dut_i_clk);
 
-        -- Check that operand from the Instruction Register is loaded into Memory.
         v_exp_control_word := (
           EN_MEM => '1',
           LOAD_AR => '1',
@@ -206,12 +204,112 @@ begin
         check_control_word(v_exp_control_word);
         wait until rising_edge(dut_i_clk);
 
-        -- Check that nothing occurs in this stage.
         v_exp_control_word := (others => '0');
         check_control_word(v_exp_control_word);
         wait until rising_edge(dut_i_clk);
 
       end if;
+
+      -- Test the ADD instruction.
+      if run("test_add") then
+        -- Load a LDA instruction.
+        v_instruction := x"11";
+        v_exp_operand := extract_operand(v_instruction);
+
+        check_fetch_cycle;
+
+        dut_i_load_instruction_reg <= '0';
+
+        v_exp_control_word := (
+          EN_IR => '1',
+          LOAD_MEM => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+        v_exp_control_word := (
+          EN_MEM => '1',
+          LOAD_BR => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+        v_exp_control_word := (
+          EN_ALU => '1',
+          LOAD_AR => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+      end if;
+
+      -- Test the SUB instruction.
+      if run("test_sub") then
+        -- Load a LDA instruction.
+        v_instruction := x"21";
+        v_exp_operand := extract_operand(v_instruction);
+
+        check_fetch_cycle;
+
+        dut_i_load_instruction_reg <= '0';
+
+        v_exp_control_word := (
+          EN_IR => '1',
+          LOAD_MEM => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+        v_exp_control_word := (
+          EN_MEM => '1',
+          LOAD_BR => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+        v_exp_control_word := (
+          EN_ALU => '1',
+          LOAD_AR => '1',
+          SUB_ALU => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+      end if;
+
+      -- Test the LOR instruction.
+      if run("test_lor") then
+        -- Load a LDA instruction.
+        v_instruction := x"E1";
+        v_exp_operand := extract_operand(v_instruction);
+
+        check_fetch_cycle;
+
+        dut_i_load_instruction_reg <= '0';
+
+        v_exp_control_word := (
+          EN_AR => '1',
+          LOAD_OR => '1',
+          others => '0'
+        );
+        check_control_word(v_exp_control_word);
+        wait until rising_edge(dut_i_clk);
+
+        for lv_iteration in natural range 1 to 2 loop
+          v_exp_control_word := (others => '0');
+          check_control_word(v_exp_control_word);
+          wait until rising_edge(dut_i_clk);
+        end loop;
+
+      end if;
+
+      -- TODO add HLT #59
 
     end loop;
 
