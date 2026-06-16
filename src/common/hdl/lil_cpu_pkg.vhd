@@ -37,10 +37,11 @@ package lil_cpu_pkg is
   constant c_ram_depth : natural := c_addr_width ** 2;
   type     t_ram is array(c_ram_depth - 1 downto 0) of t_bus_data;
 
-  type t_control_signal is (
+  constant c_num_microinstruction_states : natural := 5;
+  type     t_control_signal is (
     COUNT_PC, EN_PC, LOAD_MEM, EN_MEM, LOAD_IR, EN_IR, LOAD_AR, EN_AR, SUB_ALU, EN_ALU, LOAD_BR, LOAD_OR
   );
-  type t_control_word is array(t_control_signal) of std_logic;
+  type     t_control_word is array(t_control_signal) of std_logic;
 
 end package;
 

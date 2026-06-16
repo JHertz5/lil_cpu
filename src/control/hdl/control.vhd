@@ -32,8 +32,6 @@ architecture rtl of control is
   signal reset_count : std_logic;
   signal state_count : t_state;
 
-  constant c_num_microinstruction_states : natural := 5;
-
 begin
 
   -- Guarantee the length of the state type. Can't use clog2 in the top-level package as it would be before clog2 is
