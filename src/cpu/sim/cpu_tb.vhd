@@ -25,7 +25,7 @@ end entity;
 architecture rtl of cpu_tb is
 
   -- DUT signals.
-  signal dut_i_clk      : std_logic := '0';
+  signal dut_i_clk      : std_logic := '1';
   signal dut_o_data     : t_bus_data;
   signal dut_o_hlt     : std_logic;
 
