@@ -39,7 +39,7 @@ package lil_cpu_pkg is
 
   constant c_num_microinstruction_states : natural := 5;
   type     t_control_signal is (
-    COUNT_PC, EN_PC, LOAD_MEM, EN_MEM, LOAD_IR, EN_IR, LOAD_AR, EN_AR, SUB_ALU, EN_ALU, LOAD_BR, LOAD_OR
+    COUNT_PC, EN_PC, LOAD_MEM, EN_MEM, LOAD_IR, EN_IR, LOAD_AR, EN_AR, SUB_ALU, EN_ALU, LOAD_BR, LOAD_OR, HLT
   );
   type     t_control_word is array(t_control_signal) of std_logic;
 
