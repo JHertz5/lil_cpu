@@ -22,7 +22,8 @@ lib.add_source_files(SRC_DIR / "*" / "hdl" / "*.vhd")
 lib.add_source_files(SRC_DIR / "*" / "sim" / "*.vhd")
 
 # Add compile options for nvc.
-lib.add_compile_option("nvc.a_flags", ["--relaxed"])
+lib.set_compile_option("nvc.a_flags", ["--relaxed"])
+lib.set_sim_option("nvc.elab_flags", ["--no-collapse"])
 
 cpu_tb = lib.test_bench("cpu_tb")
 cpu_tb.set_generic("g_program_filename_base", str(SRC_DIR / "cpu" / "sim" / "test"))
