@@ -70,54 +70,27 @@ begin
       when 2 =>
         with v_opcode select o_control_word <=
           -- Load Operand to Memory.
-          (
-            EN_IR    => '1',
-            LOAD_MEM => '1',
-            others   => '0'
-          ) when LDA | ADD | SUB,
+          (EN_IR => '1', LOAD_MEM => '1', others => '0') when LDA | ADD | SUB,
           -- Load Register A to Output Register.
-          (
-            EN_AR   => '1',
-            LOAD_OR => '1',
-            others  => '0'
-          ) when LOR,
-          (
-            HLT    => '1',
-            others => '0'
-          ) when HLT,
+          (EN_AR => '1', LOAD_OR => '1', others => '0') when LOR,
+          -- Assert the Halt signal.
+          (HLT => '1', others => '0') when HLT,
           (others => '0') when others;
 
       when 3 =>
         with v_opcode select o_control_word <=
           -- Load Memory to Register A.
-          (
-            EN_MEM  => '1',
-            LOAD_AR => '1',
-            others  => '0'
-          ) when LDA,
+          (EN_MEM => '1', LOAD_AR => '1', others  => '0') when LDA,
           -- Load Memory to Register B.
-          (
-            EN_MEM  => '1',
-            LOAD_BR => '1',
-            others  => '0'
-          ) when ADD | SUB,
+          (EN_MEM => '1', LOAD_BR => '1', others  => '0') when ADD | SUB,
           (others => '0') when others;
 
       when 4 =>
         with v_opcode select o_control_word <=
           -- Load ALU to Register A.
-          (
-            EN_ALU  => '1',
-            LOAD_AR => '1',
-            others  => '0'
-          ) when ADD,
+          (EN_ALU  => '1', LOAD_AR => '1', others  => '0') when ADD,
           -- Load ALU to Register A, with subtraction enabled.
-          (
-            EN_ALU  => '1',
-            LOAD_AR => '1',
-            SUB_ALU => '1',
-            others  => '0'
-          ) when SUB,
+          (EN_ALU  => '1', LOAD_AR => '1', SUB_ALU => '1', others  => '0') when SUB,
           (others => '0') when others;
 
     end case;
