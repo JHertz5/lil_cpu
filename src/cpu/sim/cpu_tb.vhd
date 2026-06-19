@@ -17,7 +17,7 @@ library lil_cpu_lib;
 
 entity cpu_tb is
   generic (
-    runner_cfg : runner_cfg_t := runner_cfg_default;
+    runner_cfg              : runner_cfg_t := runner_cfg_default;
     g_program_filename_base : string
   );
 end entity;
@@ -25,17 +25,19 @@ end entity;
 architecture rtl of cpu_tb is
 
   -- DUT signals.
-  signal dut_i_clk      : std_logic := '1';
-  signal dut_o_data     : t_bus_data;
-  signal dut_o_hlt     : std_logic;
+  signal dut_i_clk  : std_logic := '1';
+  signal dut_o_data : t_bus_data;
+  signal dut_o_hlt  : std_logic;
 
   -- Read the program memory from a file.
-  function get_program_memory(
+  function get_program_memory (
     i_filename_base : string
   ) return t_ram is
-    file mem_file : text open read_mode is i_filename_base & ".mem";
+
+    file     mem_file   : text open read_mode is i_filename_base & ".mem";
     variable v_hex_line : line;
-    variable v_result : t_ram;
+    variable v_result   : t_ram;
+
   begin
 
     for lv_addr in t_ram'low to t_ram'high loop
@@ -43,15 +45,18 @@ architecture rtl of cpu_tb is
       hread(v_hex_line, v_result(lv_addr));
     end loop;
     return v_result;
+
   end function;
 
   -- Read the expected data from a file.
-  function get_program_expected_data(
+  function get_program_expected_data (
     i_filename_base : string
   ) return t_bus_data is
-    file exp_file : text open read_mode is i_filename_base & ".exp";
+
+    file     exp_file   : text open read_mode is i_filename_base & ".exp";
     variable v_hex_line : line;
-    variable v_result : t_bus_data;
+    variable v_result   : t_bus_data;
+
   begin
 
     readline(exp_file, v_hex_line);
@@ -60,7 +65,7 @@ architecture rtl of cpu_tb is
 
   end function;
 
-  constant c_mem_init : t_ram := get_program_memory(g_program_filename_base);
+  constant c_mem_init : t_ram      := get_program_memory(g_program_filename_base);
   constant c_exp_data : t_bus_data := get_program_expected_data(g_program_filename_base);
 
 begin
@@ -80,9 +85,9 @@ begin
       g_mem_init => c_mem_init
     )
     port map (
-      i_clk      => dut_i_clk,
-      o_data     => dut_o_data,
-      o_hlt     => dut_o_hlt
+      i_clk  => dut_i_clk,
+      o_data => dut_o_data,
+      o_hlt  => dut_o_hlt
     );
 
   ----------------------------------------------------------------------------------------------------------------------
