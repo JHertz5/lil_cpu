@@ -46,11 +46,11 @@ begin
       g_init => g_init
     )
     port map (
-      i_clk    => i_clk,
-      i_wr_rdn => '0',
-      i_addr   => mar_addr,
-      i_data   => (others => '0'),
-      o_data   => o_data
+      i_clk   => i_clk,
+      i_wr_en => '0',
+      i_addr  => mar_addr,
+      i_data  => (others => '0'),
+      o_data  => o_data
     );
 
 end architecture;

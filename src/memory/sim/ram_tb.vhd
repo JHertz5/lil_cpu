@@ -65,11 +65,11 @@ begin
       g_init => c_ram_init
     )
     port map (
-      i_clk    => dut_i_clk,
-      i_wr_rdn => dut_i_wr_rdn,
-      i_addr   => dut_i_addr,
-      i_data   => dut_i_data,
-      o_data   => dut_o_data
+      i_clk   => dut_i_clk,
+      i_wr_en => dut_i_wr_rdn,
+      i_addr  => dut_i_addr,
+      i_data  => dut_i_data,
+      o_data  => dut_o_data
     );
 
   ----------------------------------------------------------------------------------------------------------------------
