@@ -81,6 +81,10 @@ begin
             LOAD_OR => '1',
             others  => '0'
           ) when LOR,
+          (
+            HLT    => '1',
+            others => '0'
+          ) when HLT,
           (others => '0') when others;
 
       when 3 =>
