@@ -24,5 +24,8 @@ lib.add_source_files(SRC_DIR / "*" / "sim" / "*.vhd")
 # Add compile options for nvc.
 lib.add_compile_option("nvc.a_flags", ["--relaxed"])
 
+cpu_tb = lib.test_bench("cpu_tb")
+cpu_tb.set_generic("g_program_filename_base", str(SRC_DIR / "cpu" / "sim" / "test"))
+
 # Run the test suite.
 vu.main()
