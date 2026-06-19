@@ -15,7 +15,8 @@ entity cpu is
   );
   port (
     i_clk  : in  std_logic;
-    o_data : out t_bus_data
+    o_data : out t_bus_data;
+    o_hlt  : out std_logic
   );
 end entity;
 
@@ -109,5 +110,8 @@ begin
     reg_a_data when (EN_AR => '1', others => '-'),
     alu_data when (EN_ALU => '1', others => '-'),
     (others => '-') when others;
+
+  -- Output the HLT signal to show when the program is done.
+  o_hlt <= control_word(HLT);
 
 end architecture;
