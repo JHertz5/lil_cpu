@@ -188,7 +188,6 @@ begin
       -- Test the LDA instruction.
       if run("test_lda") then
         v_instruction := x"01";
-        v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
           (EN_IR => '1', LOAD_MEM => '1', others => '0'),
@@ -205,7 +204,6 @@ begin
       -- Test the ADD instruction.
       if run("test_add") then
         v_instruction := x"11";
-        v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
           (EN_IR => '1', LOAD_MEM => '1', others => '0'),
@@ -222,7 +220,6 @@ begin
       -- Test the SUB instruction.
       if run("test_sub") then
         v_instruction := x"21";
-        v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
           (EN_IR => '1', LOAD_MEM => '1', others => '0'),
@@ -239,7 +236,6 @@ begin
       -- Test the LOR instruction.
       if run("test_lor") then
         v_instruction := x"E1";
-        v_exp_operand := extract_operand(v_instruction);
 
         v_expected_sequence := (
           (EN_AR => '1', LOAD_OR => '1', others => '0'),
@@ -253,7 +249,22 @@ begin
 
       end if;
 
-    -- TODO add HLT #59
+      -- Test the HLT instruction.
+      if run("test_hlt") then
+        v_instruction := x"F0";
+        v_exp_operand := extract_operand(v_instruction);
+
+        v_expected_sequence := (
+          (HLT => '1', others => '0'),
+          (HLT => '1', others => '0'),
+          (HLT => '1', others => '0')
+        );
+        check_microinstruction_sequence(
+          i_expected_sequence => v_expected_sequence,
+          i_instruction       => v_instruction
+        );
+
+      end if;
 
     end loop;
 

@@ -57,7 +57,7 @@ begin
   -- Output the operand.
   o_operand <= x"0" & std_logic_vector(instruction.operand);
 
-  -- Instantiate the state counter.
+  -- Instantiate the state counter. Stop the counter when the HLT control signal is asserted to halt the entire system.
   cmp_state_counter : entity lil_cpu_lib.counter(rtl)
     generic map (
       g_count_length => state_count'length
@@ -65,7 +65,7 @@ begin
     port map (
       i_clk      => i_clk,
       i_reset    => reset_count,
-      i_count_en => '1',
+      i_count_en => not o_control_word(HLT),
       o_count    => state_count
     );
 
