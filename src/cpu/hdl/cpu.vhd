@@ -103,13 +103,13 @@ begin
   );
 
   -- Control the flow of data between modules with a multiplexer.
-  with control_word select bus_data <=
-    program_count_slv when (EN_PC => '1', others => '-'),
-    memory_data when (EN_MEM => '1', others => '-'),
-    operand when (EN_IR => '1', others => '-'),
-    reg_a_data when (EN_AR => '1', others => '-'),
-    alu_data when (EN_ALU => '1', others => '-'),
-    (others => '-') when others;
+  bus_data <=
+    program_count_slv when control_word(EN_PC) else
+    memory_data       when control_word(EN_MEM) else
+    operand           when control_word(EN_IR) else
+    reg_a_data        when control_word(EN_AR) else
+    alu_data          when control_word(EN_ALU) else
+    (others => '-');
 
   -- Output the HLT signal to show when the program is done.
   o_hlt <= control_word(HLT);
