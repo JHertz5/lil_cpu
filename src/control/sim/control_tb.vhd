@@ -249,7 +249,22 @@ begin
 
       end if;
 
-    -- TODO add HLT #59
+      -- Test the HLT instruction.
+      if run("test_hlt") then
+        v_instruction := x"F0";
+        v_exp_operand := extract_operand(v_instruction);
+
+        v_expected_sequence := (
+          (HLT => '1', others => '0'),
+          (HLT => '1', others => '0'),
+          (HLT => '1', others => '0')
+        );
+        check_microinstruction_sequence(
+          i_expected_sequence => v_expected_sequence,
+          i_instruction       => v_instruction
+        );
+
+      end if;
 
     end loop;
 
